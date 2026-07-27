@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>注册 - 茂名旅游网站</title>
+  <link rel="stylesheet" href="Register.css">
+  <link rel="icon" href="../../img/logo.jpg" type="image/png">
+</head>
+<body>
+  <nav class="login-nav">
+    <span class="nav-title">茂名旅游</span>
+    <a href="../../index.html">返回首页</a>
+  </nav>
+
+  <div class="login-wrapper">
+    <div class="outside">
+      <div class="outside-top">
+        <h2>注册账号</h2>
+        <p>茂名旅游网站 · 新用户注册</p>
+      </div>
+      <div class="inside">
+        <div id="regMsg"></div>
+        <input id="regEmail" type="email" placeholder="请输入邮箱">
+        <input id="regUser" type="text" placeholder="请设置账户">
+        <input id="regPass" type="password" placeholder="请设置密码">
+        <div class="btn">
+          <a href="Login.html">已有账号？点此登录</a>
+          <button type="button" id="regBtn">注 册</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var regBtn = document.getElementById("regBtn");
+    var msgEl = document.getElementById("regMsg");
+
+    regBtn.addEventListener("click", async function() {
+      var username = document.getElementById("regUser").value.trim();
+      var email = document.getElementById("regEmail").value.trim();
+      var password = document.getElementById("regPass").value.trim();
+      if (!username || !email || !password) {
+        msgEl.textContent = "请填写完整信息"; msgEl.className = ""; return;
+      }
+      msgEl.textContent = "注册中..."; msgEl.className = "";
+      try {
+        var res = await fetch("/api/auth/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, email, password })
+        });
+        if (!res.ok) {
+          var errData = await res.json().catch(function(){ return {msg:"请求失败"}; });
+          msgEl.textContent = errData.msg || "注册失败"; msgEl.className = ""; return;
+        }
+        var data = await res.json();
+        if (data.ok) {
+          localStorage.setItem("token", data.data.token);
+          localStorage.setItem("username", data.data.username);
+          msgEl.textContent = "注册成功！即将跳转到登录页..."; msgEl.className = "success";
+          setTimeout(function() { location.href = "Login.html"; }, 800);
+        } else {
+          msgEl.textContent = data.msg || "注册失败"; msgEl.className = "";
+        }
+      } catch (e) {
+        msgEl.textContent = "后端服务未启动，请先运行 server/server.js"; msgEl.className = "";
+      }
+    });
+
+    document.getElementById("regPass").addEventListener("keydown", function(e) {
+      if (e.key === "Enter") regBtn.click();
+    });
+  </script>
+</body>
+</html>

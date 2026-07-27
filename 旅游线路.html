@@ -1,32 +1,43 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>旅游线路 - 茂名旅游网站</title>
+  <title>旅游线路 - 阿瓜测试旅游网站</title>
   <meta name="description" content="茂名精选旅游线路，一日游、多日游、自驾游等">
-  <link rel="icon" href="img/favicon.png" type="image/png">
+  <link rel="icon" href="img/logo.jpg" type="image/png">
   <link rel="stylesheet" href="css/common.css">
   <link rel="stylesheet" href="css/旅游线路.css">
 </head>
+
 <body>
   <header class="header">
-    <img loading="lazy" src="img/02.jpg" alt="茂名旅游">
+    <img loading="lazy" src="img/logo.jpg" alt="茂名旅游">
     <div class="yuyang">
       <ul>
-        <li ></li><li ></li><li ></li><li ></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
       </ul>
     </div>
-    <nav class="nav"><ul class="nav-links">
+    <nav class="nav">
+      <ul class="nav-links">
         <li><a href="index.html">首页</a></li>
         <li><a href="茂名概述.html">茂名概述</a></li>
         <li><a href="旅游咨询.html">旅游咨询</a></li>
         <li><a href="旅游线路.html" class="active">旅游线路</a></li>
         <li><a href="js/登录/Login.html" id="navLogin">登录</a></li>
-      </ul><ul id="langSwitcher" class="nav-lang"><li data-lang="zh" class="active">中</li><li data-lang="en">EN</li><li data-lang="ja">日</li><li data-lang="ko">한</li></ul></nav>
-      <div class="banner">
-        <p>山海并茂，好客茂名欢迎您</p>
-      </div>
+      </ul>
+      <ul id="langSwitcher" class="nav-lang">
+        <li data-lang="zh" class="active">中</li>
+        <li data-lang="en">EN</li>
+      </ul>
+    </nav>
+    <div class="banner">
+      <p>山海并茂，好客茂名欢迎您</p>
+    </div>
   </header>
 
   <main class="continer">
@@ -79,9 +90,12 @@
           <div class="comments-loading">加载评论中...</div>
         </div>
 
-        <div class="comment-form">
-          <h4>发表评价</h4>
-          <div class="comment-form-row">
+        <div class="comment-form" id="commentForm">
+          <div class="comment-form-header">
+            <h4>发表评价</h4>
+            <span id="commentLoginStatus" class="comment-login-status"></span>
+          </div>
+          <div class="comment-form-row" id="commentNameRow">
             <input type="text" id="commentName" placeholder="您的称呼" maxlength="20" class="comment-input">
           </div>
           <div class="comment-form-row">
@@ -113,12 +127,12 @@
       </div>
       <div class="footer-col">
         <h4>联系方式</h4>
-        <p>地址：广东省茂名市<br>邮箱：info@maoming-travel.com<br>电话：0668-XXXXXXX</p>
+        <p>地址：广东省茂名市<br>邮箱：2869204426@qq.com<br>电话：0668-XXXXXXX</p>
       </div>
     </div>
     <div class="footer-bottom">
       <div class="footer-bottom-inner">
-        <p>&copy; 2025 茂名旅游网站 &mdash; 本站为学习作品，部分素材来自网络</p>
+        <p>&copy; 2025 阿瓜测试旅游网站 &mdash; 本站为学习作品，部分素材来自网络</p>
         <div class="footer-social">
           <a href="#" title="微信">W</a>
           <a href="#" title="微博">S</a>
@@ -133,32 +147,218 @@
   <script>
     var allRoutes = [];
 
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
       loadRoutes();
       bindFilterEvents();
       initBooking();
       initComments();
+      updateCommentLoginUI();
     });
+
+    /* ── 登录状态监听 ── */
+    function updateCommentLoginUI() {
+      var token = localStorage.getItem("token");
+      var username = localStorage.getItem("username");
+      var nameRow = document.getElementById("commentNameRow");
+      var nameInput = document.getElementById("commentName");
+      var statusEl = document.getElementById("commentLoginStatus");
+      var submitBtn = document.getElementById("commentSubmit");
+
+      if (token && username) {
+        nameRow.style.display = "none";
+        nameInput.value = username;
+        statusEl.innerHTML = "以 <strong>" + username + "</strong> 发表";
+        statusEl.className = "comment-login-status logged-in";
+        submitBtn.disabled = false;
+      } else {
+        nameRow.style.display = "block";
+        nameInput.value = "";
+        statusEl.innerHTML = "请先 <a href='js/登录/Login.html' class='login-link'>登录</a> 后再评论哟";
+        statusEl.className = "comment-login-status not-logged-in";
+        submitBtn.disabled = true;
+      }
+    }
+
+    /* ── 评论模块 ── */
+    function initComments() {
+      loadAllComments();
+      document.getElementById("commentRouteFilter").addEventListener("change", function () {
+        loadAllComments(this.value);
+      });
+      document.getElementById("commentSubmit").addEventListener("click", submitComment);
+    }
+
+    function populateRouteFilter(routes) {
+      var sel = document.getElementById("commentRouteFilter");
+      sel.innerHTML = '<option value="all">全部线路</option>';
+      routes.forEach(function (r) {
+        var opt = document.createElement("option");
+        opt.value = r.id;
+        opt.textContent = r.title;
+        sel.appendChild(opt);
+      });
+    }
+
+    var commentsData = [];
+
+    function loadAllComments(routeId) {
+      routeId = routeId || document.getElementById("commentRouteFilter").value;
+      var url = routeId === "all" ? "/api/comments" : "/api/routes/" + routeId + "/comments";
+      var list = document.getElementById("commentsList");
+      list.innerHTML = '<div class="comments-loading">加载评论中...</div>';
+
+      fetch(url)
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          if (!data.ok || !data.data || !data.data.length) {
+            list.innerHTML = '<div class="comments-empty">暂无评价，来发表第一条吧</div>';
+            return;
+          }
+          commentsData = data.data;
+          renderCommentsLimited(2);
+        })
+        .catch(function () {
+          list.innerHTML = '<div class="comments-empty">加载评论失败</div>';
+        });
+    }
+
+    function renderCommentsLimited(showCount) {
+      var list = document.getElementById("commentsList");
+      var total = commentsData.length;
+      var show = Math.min(showCount, total);
+      var html = commentsData.slice(0, show).map(function (c) {
+        return renderComment(c);
+      }).join("");
+
+      if (total > showCount) {
+        html += '<div class="comments-toggle" id="commentsToggle">'
+          + '<span class="toggle-btn" onclick="toggleComments()">'
+          + '展开全部 ' + total + ' 条评论 '
+          + '<span class="toggle-arrow">▾</span>'
+          + '</span>'
+          + '</div>';
+      }
+
+      list.innerHTML = html;
+      list.setAttribute("data-expanded", "false");
+    }
+
+    function toggleComments() {
+      var list = document.getElementById("commentsList");
+      var expanded = list.getAttribute("data-expanded") === "true";
+      var btn = document.querySelector(".toggle-btn");
+
+      if (expanded) {
+        renderCommentsLimited(2);
+        list.setAttribute("data-expanded", "false");
+      } else {
+        var html = commentsData.map(function (c) {
+          return renderComment(c);
+        }).join("");
+        html += '<div class="comments-toggle">'
+          + '<span class="toggle-btn" onclick="toggleComments()">'
+          + '收起评论 '
+          + '<span class="toggle-arrow">▴</span>'
+          + '</span>'
+          + '</div>';
+        list.innerHTML = html;
+        list.setAttribute("data-expanded", "true");
+      }
+    }
+
+    function renderComment(c) {
+      var initial = c.username.charAt(0).toUpperCase();
+      var routeLabel = c.route_title ? '<span class="comment-route-label">' + c.route_title + '</span>' : '';
+      return '<div class="comment-item">' +
+        '<div class="comment-avatar">' + initial + '</div>' +
+        '<div class="comment-body">' +
+        '<div class="comment-meta">' +
+        '<span class="comment-name">' + escapeHtml(c.username) + '</span>' +
+        routeLabel +
+        '<span class="comment-date">' + c.created_at + '</span>' +
+        '</div>' +
+        '<div class="comment-text">' + escapeHtml(c.content) + '</div>' +
+        '</div>' +
+        '</div>';
+    }
+
+    function submitComment() {
+      var token = localStorage.getItem("token");
+      var username = localStorage.getItem("username");
+      var hint = document.getElementById("commentHint");
+      var btn = document.getElementById("commentSubmit");
+
+      /* ── 未登录拦截 ── */
+      if (!token || !username) {
+        hint.innerHTML = "请先 <a href='js/登录/Login.html' style='color:var(--blue);text-decoration:underline'>登录</a> 后再评论哟";
+        hint.style.color = "#D4504C";
+        return;
+      }
+
+      var content = document.getElementById("commentContent").value.trim();
+      var routeId = document.getElementById("commentRouteFilter").value;
+
+      if (!content) { hint.textContent = "请填写评价内容"; hint.style.color = "var(--text-muted)"; return; }
+      if (routeId === "all") { hint.textContent = "请先在上方选择一条线路"; hint.style.color = "var(--text-muted)"; return; }
+
+      hint.textContent = "";
+      btn.disabled = true;
+      btn.textContent = "提交中...";
+
+      fetch("/api/routes/" + routeId + "/comments", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + token
+        },
+        body: JSON.stringify({ username: username, content: content })
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          if (data.ok) {
+            document.getElementById("commentContent").value = "";
+            hint.textContent = "评价成功！";
+            hint.style.color = "#10A37F";
+            loadAllComments(routeId);
+          } else {
+            hint.textContent = data.msg || "提交失败";
+            hint.style.color = "#D4504C";
+          }
+        })
+        .catch(function () {
+          hint.textContent = "提交失败，请确认服务已启动";
+          hint.style.color = "#D4504C";
+        })
+        .finally(function () {
+          btn.disabled = false;
+          btn.textContent = "提交评价";
+        });
+    }
+
+    function escapeHtml(str) {
+      var div = document.createElement("div");
+      div.appendChild(document.createTextNode(str));
+      return div.innerHTML;
+    }
 
     function loadRoutes(filters) {
       var params = new URLSearchParams(filters || {});
       var url = "/api/routes" + (params.toString() ? "?" + params.toString() : "");
 
       fetch(url)
-        .then(function(r) { return r.json(); })
-        .then(function(data) {
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
           if (data.ok) {
             allRoutes = data.data;
             renderRoutes(allRoutes);
             populateRouteFilter(allRoutes);
           }
         })
-        .catch(function() {
+        .catch(function () {
           document.getElementById("routeList").innerHTML = "<p class=\"no-result\">无法加载线路数据，请确认服务已启动</p>";
         });
     }
 
-    // Translate route cards using current language
     function getRouteTranslation(routeId, field) {
       var lang = localStorage.getItem("preferred_lang") || "zh";
       var dict = window.__lang;
@@ -166,14 +366,15 @@
       var key = "route_card_" + routeId + "_" + field;
       return dict[lang][key] || null;
     }
-function renderRoutes(routes) {
+
+    function renderRoutes(routes) {
       var list = document.getElementById("routeList");
       list.innerHTML = "";
       if (routes.length === 0) {
         list.innerHTML = "<p class=\"no-result\">没有找到符合条件的线路</p>";
         return;
       }
-      routes.forEach(function(r) {
+      routes.forEach(function (r) {
         var typeMap = { coastal: "滨海风光", mountain: "山地景观", cultural: "文化古迹" };
         var translatedTitle = getRouteTranslation(r.id, "title") || r.title;
         var translatedDesc = getRouteTranslation(r.id, "desc") || r.description;
@@ -182,20 +383,20 @@ function renderRoutes(routes) {
         card.innerHTML =
           '<img loading="lazy" src="' + r.img + '" alt="' + translatedTitle + '">' +
           '<div class="route-info">' +
-            '<h3>' + translatedTitle + '</h3>' +
-            '<p class="days">' + r.days + '天 ' + (typeMap[r.destination] || "综合旅游") + '</p>' +
-            '<p class="description">' + translatedDesc + '</p>' +
-            '<div class="price">¥' + r.price + '<span class="unit">/人起</span></div>' +
-            '<button class="book-btn" data-id="' + r.id + '">立即预订</button>' +
+          '<h3>' + translatedTitle + '</h3>' +
+          '<p class="days">' + r.days + '天 ' + (typeMap[r.destination] || "综合旅游") + '</p>' +
+          '<p class="description">' + translatedDesc + '</p>' +
+          '<div class="price">¥' + r.price + '<span class="unit">/人起</span></div>' +
+          '<button class="book-btn" data-id="' + r.id + '">立即预订</button>' +
           '</div>';
         list.appendChild(card);
       });
     }
 
     function bindFilterEvents() {
-      ["destinationFilter", "priceFilter", "daysFilter"].forEach(function(id) {
+      ["destinationFilter", "priceFilter", "daysFilter"].forEach(function (id) {
         var el = document.getElementById(id);
-        if (el) el.addEventListener("change", function() {
+        if (el) el.addEventListener("change", function () {
           var filters = {};
           var d = document.getElementById("destinationFilter").value;
           var p = document.getElementById("priceFilter").value;
@@ -213,7 +414,7 @@ function renderRoutes(routes) {
     }
 
     function initBooking() {
-      document.addEventListener("click", function(e) {
+      document.addEventListener("click", function (e) {
         var btn = e.target.closest(".book-btn");
         if (!btn) return;
         var id = btn.getAttribute("data-id");
@@ -227,120 +428,16 @@ function renderRoutes(routes) {
           headers: { "Content-Type": "application/json", "Authorization": "Bearer " + (localStorage.getItem("token") || "") },
           body: JSON.stringify({ name: name, phone: phone, people: 1 })
         })
-        .then(function(r) { return r.json(); })
-        .then(function(data) {
-          alert(data.msg || "预订成功");
-        })
-        .catch(function() {
-          alert("预订失败，请确认服务已启动");
-        });
+          .then(function (r) { return r.json(); })
+          .then(function (data) {
+            alert(data.msg || "预订成功");
+          })
+          .catch(function () {
+            alert("预订失败，请确认服务已启动");
+          });
       });
-    }
-
-    /* ── 评论模块 ── */
-    function initComments() {
-      loadAllComments();
-      document.getElementById("commentRouteFilter").addEventListener("change", function() {
-        loadAllComments(this.value);
-      });
-      document.getElementById("commentSubmit").addEventListener("click", submitComment);
-    }
-
-    function populateRouteFilter(routes) {
-      var sel = document.getElementById("commentRouteFilter");
-      sel.innerHTML = '<option value="all">全部线路</option>';
-      routes.forEach(function(r) {
-        var opt = document.createElement("option");
-        opt.value = r.id;
-        opt.textContent = r.title;
-        sel.appendChild(opt);
-      });
-    }
-
-    function loadAllComments(routeId) {
-      routeId = routeId || document.getElementById("commentRouteFilter").value;
-      var url = routeId === "all" ? "/api/comments" : "/api/routes/" + routeId + "/comments";
-      var list = document.getElementById("commentsList");
-      list.innerHTML = '<div class="comments-loading">加载评论中...</div>';
-
-      fetch(url)
-        .then(function(r) { return r.json(); })
-        .then(function(data) {
-          if (!data.ok || !data.data || !data.data.length) {
-            list.innerHTML = '<div class="comments-empty">暂无评价，来发表第一条吧</div>';
-            return;
-          }
-          list.innerHTML = data.data.map(function(c) {
-            return renderComment(c);
-          }).join("");
-        })
-        .catch(function() {
-          list.innerHTML = '<div class="comments-empty">加载评论失败</div>';
-        });
-    }
-
-    function renderComment(c) {
-      var initial = c.username.charAt(0).toUpperCase();
-      var routeLabel = c.route_title ? '<span class="comment-route-label">' + c.route_title + '</span>' : '';
-      return '<div class="comment-item">' +
-        '<div class="comment-avatar">' + initial + '</div>' +
-        '<div class="comment-body">' +
-          '<div class="comment-meta">' +
-            '<span class="comment-name">' + escapeHtml(c.username) + '</span>' +
-            routeLabel +
-            '<span class="comment-date">' + c.created_at + '</span>' +
-          '</div>' +
-          '<div class="comment-text">' + escapeHtml(c.content) + '</div>' +
-        '</div>' +
-      '</div>';
-    }
-
-    function submitComment() {
-      var name = document.getElementById("commentName").value.trim();
-      var content = document.getElementById("commentContent").value.trim();
-      var routeId = document.getElementById("commentRouteFilter").value;
-      var hint = document.getElementById("commentHint");
-      var btn = document.getElementById("commentSubmit");
-
-      if (!name) { hint.textContent = "请填写称呼"; return; }
-      if (!content) { hint.textContent = "请填写评价内容"; return; }
-      if (routeId === "all") { hint.textContent = "请先在上方选择一条线路"; return; }
-
-      hint.textContent = "";
-      btn.disabled = true;
-      btn.textContent = "提交中...";
-
-      fetch("/api/routes/" + routeId + "/comments", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username: name, content: content })
-      })
-      .then(function(r) { return r.json(); })
-      .then(function(data) {
-        if (data.ok) {
-          document.getElementById("commentName").value = "";
-          document.getElementById("commentContent").value = "";
-          hint.textContent = "评价成功！";
-          hint.style.color = "#10A37F";
-          loadAllComments(routeId);
-        } else {
-          hint.textContent = data.msg || "提交失败";
-        }
-      })
-      .catch(function() {
-        hint.textContent = "提交失败，请确认服务已启动";
-      })
-      .finally(function() {
-        btn.disabled = false;
-        btn.textContent = "提交评价";
-      });
-    }
-
-    function escapeHtml(str) {
-      var div = document.createElement("div");
-      div.appendChild(document.createTextNode(str));
-      return div.innerHTML;
     }
   </script>
 </body>
+
 </html>

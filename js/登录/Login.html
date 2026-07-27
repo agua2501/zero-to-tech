@@ -1,0 +1,96 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>登录 - 茂名旅游网站</title>
+  <link rel="stylesheet" href="Login.css">
+  <link rel="icon" href="../../img/logo.jpg" type="image/png">
+</head>
+<body>
+  <nav class="login-nav">
+    <span class="nav-title">茂名旅游</span>
+    <a href="../../index.html">返回首页</a>
+  </nav>
+
+  <div class="login-wrapper">
+    <div class="outside">
+      <div class="outside-top">
+        <h2>大炮茂登录</h2>
+        <p>茂名旅游网站 · 用户登录</p>
+      </div>
+      <div class="inside">
+        <div id="loginMsg"></div>
+        <input id="loginUser" type="text" placeholder="请输入账户">
+        <input id="loginPass" type="password" placeholder="请输入密码">
+        <div class="btn">
+          <button type="button" id="clearBtn">清空重填</button>
+          <button type="button" id="loginBtn">登 录</button>
+          <button type="button" onclick="location.href='./Register.html'">注 册</button>
+        </div>
+        <hr>
+        <div class="icon">
+          <img src="image/qq.png" alt="QQ登录" title="QQ登录">
+          <img src="image/wechat.png" alt="微信登录" title="微信登录">
+          <img src="image/weibo.png" alt="微博登录" title="微博登录">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var loginBtn = document.getElementById("loginBtn");
+    var msgEl = document.getElementById("loginMsg");
+
+    document.getElementById("clearBtn").addEventListener("click", function() {
+      document.getElementById("loginUser").value = "";
+      document.getElementById("loginPass").value = "";
+      msgEl.textContent = "";
+      msgEl.className = "";
+    });
+
+    loginBtn.addEventListener("click", async function() {
+      var username = document.getElementById("loginUser").value.trim();
+      var password = document.getElementById("loginPass").value.trim();
+      if (!username || !password) {
+        msgEl.textContent = "请输入用户名和密码";
+        msgEl.className = "";
+        return;
+      }
+      msgEl.textContent = "登录中...";
+      msgEl.className = "";
+      try {
+        var res = await fetch("/api/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username: username, password: password })
+        });
+        if (!res.ok) {
+          var errData = await res.json().catch(function(){ return {msg:"请求失败"}; });
+          msgEl.textContent = errData.msg || "登录失败";
+          msgEl.className = "";
+          return;
+        }
+        var data = await res.json();
+        if (data.ok) {
+          localStorage.setItem("token", data.data.token);
+          localStorage.setItem("username", data.data.username);
+          msgEl.textContent = "登录成功！正在跳转...";
+          msgEl.className = "success";
+          setTimeout(function() { location.href = "../../index.html"; }, 800);
+        } else {
+          msgEl.textContent = data.msg || "用户名或密码错误";
+          msgEl.className = "";
+        }
+      } catch (e) {
+        msgEl.textContent = "后端服务未启动，请先运行 server/server.js";
+        msgEl.className = "";
+      }
+    });
+
+    document.getElementById("loginPass").addEventListener("keydown", function(e) {
+      if (e.key === "Enter") loginBtn.click();
+    });
+  </script>
+</body>
+</html>

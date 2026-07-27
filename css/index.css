@@ -1,0 +1,176 @@
+/* ===================================================
+   首页样式 v5 — 毛玻璃融合版
+   =================================================== */
+
+/* 三栏区 */
+.one{display:flex;flex-wrap:wrap;width:100%;gap:clamp(12px,2vw,24px)}
+.one>.left{flex:0 0 clamp(150px,15vw,180px);background:var(--navy);padding:24px 16px;border-radius:var(--radius-md)}
+.one>.left>h2{color:var(--gold);font-size:clamp(16px,1.3vw,18px);font-weight:600;padding:0 0 16px;border-bottom:1px solid rgba(255,255,255,0.08);letter-spacing:2px}
+.one>.left>ul{padding-top:12px}
+.one>.left>ul>li{color:rgba(255,255,255,0.8);line-height:2.8;padding-left:16px;background:url(../img/900.jpg)no-repeat 2px 17px;background-size:8px;font-size:clamp(13px,1vw,14px);cursor:pointer;transition:var(--transition)}
+.one>.left>ul>li:hover{color:var(--gold);padding-left:20px}
+
+/* 中间 - 轮播图容器 */
+.one>.center{flex:1 1 280px;min-height:400px;overflow:hidden;position:relative;border-radius:var(--radius-md);background:#dde0e4}
+
+/* 右侧 */
+.one>.right{flex:0 0 clamp(200px,20vw,240px);padding:16px;margin-top:4px}
+.one>.right>.news{display:flex;align-items:center;justify-content:space-between;padding-bottom:12px;border-bottom:2px solid rgba(0,0,0,0.06);margin-bottom:10px}
+.one>.right>.news>.news_left{font-weight:700;font-size:clamp(14px,1.1vw,15px);color:var(--text);position:relative}
+.one>.right>.news>.news_left::after{content:"";position:absolute;bottom:-12px;left:0;width:28px;height:2px;background:var(--gold)}
+.one>.right>.news>.news_right a{font-size:clamp(11px,0.9vw,13px);color:var(--text-muted)}
+.one>.right>.news>.news_right a:hover{color:var(--navy)}
+.one>.right>ul{padding:0}
+.one>.right>ul>li{font-size:clamp(12px,0.9vw,13px);line-height:2.6;padding-left:14px;background:url(../img/1112.png)no-repeat 3px 14px;background-size:6px;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;transition:var(--transition)}
+.one>.right>ul>li:hover{color:var(--navy);padding-left:18px}
+
+/* 精品线路 */
+.two{display:flex;width:100%;gap:clamp(12px,2vw,24px);margin-top:4px}
+.two>.twoleft{flex:1 1 72%;min-width:0}
+.two>.twoRight{flex:0 0 clamp(160px,18vw,240px);display:flex;flex-direction:column;gap:12px}
+.two>.twoRight>.item{width:100%;aspect-ratio:16/9;min-height:90px;border-radius:var(--radius-md);overflow:hidden;transition:var(--transition);box-shadow:var(--shadow-sm);background:#e0e3e8}
+.two>.twoRight>.item:hover{transform:scale(1.02);box-shadow:var(--shadow-md)}
+.two>.twoRight>.item:nth-of-type(1){background:url(../img/324.jpg)no-repeat center;background-size:cover}
+.two>.twoRight>.item:nth-of-type(2){background:url(../img/781090.jpg)no-repeat center;background-size:cover}
+.two>.twoRight>.item:nth-of-type(3){background:url(../img/873jpg.jpg)no-repeat center;background-size:cover}
+
+.twoleft>.top{width:100%;display:flex;align-items:center;flex-wrap:wrap;padding:14px clamp(12px,2vw,24px);gap:clamp(6px,1vw,12px);background:var(--navy);border-radius:var(--radius-md) var(--radius-md) 0 0}
+.twoleft>.top>.title{font-size:clamp(15px,1.3vw,17px);font-weight:600;color:var(--gold);letter-spacing:1px;margin-right:clamp(4px,1vw,12px)}
+.twoleft>.top>.item{padding:4px 14px;border-radius:20px;font-size:clamp(11px,1vw,13px);color:rgba(255,255,255,0.85);white-space:nowrap;transition:var(--transition);background:rgba(255,255,255,0.1)}
+.twoleft>.top>.item:hover{background:rgba(196,163,90,0.25);color:#fff}
+.twoleft>.top>.more{margin-left:auto}
+.twoleft>.top>.more>a{font-size:clamp(12px,1vw,13px);color:rgba(255,255,255,0.5);transition:var(--transition);white-space:nowrap}
+.twoleft>.top>.more>a:hover{color:var(--gold)}
+
+.twoleft>.bottom{display:flex;width:100%;background:transparent;gap:1px;border-radius:0 0 var(--radius-md) var(--radius-md);overflow:hidden}
+.bottomleft{flex:0 0 clamp(180px,24vw,260px);display:flex;flex-direction:column}
+.bottomleft>.world{background:rgba(245,243,238,0.9);padding:clamp(10px,1.5vw,18px)}
+.world>.title{font-size:clamp(15px,1.3vw,17px);font-weight:600;color:var(--text)}
+.world>.title>em{font-size:clamp(20px,2vw,24px);color:var(--navy);margin-right:4px}
+.world>p{font-size:clamp(11px,0.9vw,13px);color:var(--text-muted);margin-top:6px;line-height:1.6}
+.bottomleft>.pic{flex:1;min-height:120px;background:url(../img/543.jpg)no-repeat center;background-size:cover}
+
+.bottomright{flex:1;min-width:0;background:transparent}
+.bottomright>.top2Right{display:flex;flex-direction:column}
+.bottomright>.top2Right>.item{display:flex;align-items:flex-start;gap:clamp(8px,1.2vw,16px);padding:clamp(8px,1vw,14px) clamp(10px,1.5vw,18px);border-bottom:1px solid rgba(0,0,0,0.05);transition:var(--transition)}
+.bottomright>.top2Right>.item:last-child{border-bottom:none}
+.bottomright>.top2Right>.item:hover{background:rgba(15,26,46,0.02)}
+.bottomright>.top2Right>.item img{width:clamp(55px,5vw,85px);height:clamp(55px,5vw,75px);object-fit:cover;flex-shrink:0;border-radius:var(--radius-sm)}
+.itemRight{flex:1;min-width:0}
+.itemRight h3{font-size:clamp(14px,1.1vw,16px);color:var(--text);margin-bottom:4px;font-weight:600}
+.itemRight h3 em{font-size:clamp(20px,2vw,26px);color:var(--navy-light);margin-right:3px}
+.itemRight p{font-size:clamp(11px,0.9vw,12px);color:var(--text-muted);line-height:1.5}
+
+/* 旅游向导 */
+.top3{width:100%;margin-top:4px}
+.guide{width:100%;text-align:center;font-size:clamp(22px,2.5vw,28px);font-weight:700;color:var(--navy);margin-bottom:24px;position:relative;padding-bottom:16px}
+.guide::after{content:"";position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:60px;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold-light));border-radius:2px}
+.top3>.area{display:grid;grid-template-columns:repeat(5,1fr);gap:clamp(10px,1.2vw,16px);justify-items:center}
+.top3>.area>.item{width:100%;max-width:200px;border-radius:var(--radius-md);overflow:hidden;transition:var(--transition);box-shadow:var(--shadow-sm);position:relative}
+.top3>.area>.item:hover{transform:translateY(-4px);box-shadow:var(--shadow-md)}
+.top3>.area>.item>img{width:100%;aspect-ratio:3/4;object-fit:cover;display:block;transition:var(--transition)}
+.top3>.area>.item:hover>img{transform:scale(1.06)}
+.top3>.area>.item>span{position:absolute;top:12px;left:12px;color:#fff;font-size:clamp(14px,1.2vw,16px);font-weight:700;text-shadow:0 2px 8px rgba(0,0,0,0.3);z-index:2}
+.top3>.area>.item>ul{position:absolute;bottom:0;left:0;right:0;padding:10px 10px 8px;background:linear-gradient(transparent,rgba(0,0,0,0.65));display:flex;flex-wrap:wrap;gap:3px;justify-content:center}
+.top3>.area>.item>ul>li{font-size:clamp(10px,0.8vw,11px);color:rgba(255,255,255,0.9);padding:2px 7px;background:rgba(255,255,255,0.15);border-radius:8px;line-height:1.6}
+
+/* 轮播图 */
+#homeCarousel{position:relative;width:100%;height:100%;min-height:400px;overflow:hidden}
+.carousel-track{position:relative;width:100%;height:100%;min-height:400px}
+.carousel-slide{position:absolute;top:0;left:0;width:100%;height:100%;opacity:0;transition:opacity .6s ease;z-index:1}
+.carousel-slide.active{opacity:1;z-index:2}
+.carousel-slide img{width:100%;height:100%;min-height:400px;object-fit:cover;display:block}
+.carousel-slide .carousel-caption{position:absolute;bottom:12px;left:14px;color:#fff;font-size:clamp(13px,1.2vw,15px);text-shadow:0 1px 6px rgba(0,0,0,.5);z-index:3;background:rgba(0,0,0,.35);padding:4px 12px;border-radius:4px;backdrop-filter:blur(4px)}
+.carousel-btn{position:absolute;top:50%;transform:translateY(-50%);z-index:10;background:rgba(0,0,0,.3);color:#fff;border:none;width:32px;height:44px;font-size:16px;cursor:pointer;transition:var(--transition);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.carousel-btn:hover{background:rgba(0,0,0,.55)}
+.carousel-prev{left:0;border-radius:0 6px 6px 0}
+.carousel-next{right:0;border-radius:6px 0 0 6px}
+.carousel-dots{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);z-index:10;display:flex;gap:6px}
+.carousel-dots .dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.4);cursor:pointer;transition:var(--transition)}
+.carousel-dots .dot.active{background:var(--gold);width:22px;border-radius:4px}
+
+/* 响应式 */
+@media(max-width:992px){
+  .two{flex-direction:column}
+  .two>.twoRight{flex-direction:row;flex-basis:auto}
+  .two>.twoRight>.item{flex:1;aspect-ratio:3/1;min-height:70px}
+  .twoleft>.bottom{flex-direction:column}
+  .bottomleft{flex-basis:auto}
+  .bottomleft>.pic{min-height:100px}
+  .top3>.area{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:768px){
+  .one{flex-direction:column}
+  .one>.left,.one>.right{flex-basis:auto;width:100%}
+  .one>.center{min-height:280px}
+  .one>.right>ul>li{white-space:normal}
+  .top3>.area{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:480px){
+  .top3>.area{grid-template-columns:1fr;justify-items:center}
+  .top3>.area>.item{max-width:280px}
+  .twoleft>.top>.item:nth-child(n+4){display:none}
+}
+
+/* ── twoRight 图片文字标签 ── */
+.two>.twoRight>.item{
+  position:relative;
+  display:flex;align-items:flex-end;
+  justify-content:center;
+  cursor:pointer
+}
+.twoRight-label{
+  color:#fff;
+  font-size:clamp(13px,1vw,15px);
+  font-weight:600;
+  letter-spacing:2px;
+  padding:10px 16px;
+  background:linear-gradient(transparent,rgba(0,0,0,0.55));
+  width:100%;text-align:center;
+  text-shadow:0 1px 4px rgba(0,0,0,0.3)
+}
+
+/* ── 首页覆盖：去掉通用玻璃，按需保留 ── */
+.continer > * {
+  background: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  border: none !important;
+  padding: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* 三栏区：整体保持玻璃卡片，衬托侧栏与新闻文字 */
+.one{
+  background:var(--glass) !important;
+  backdrop-filter:blur(8px) !important;
+  -webkit-backdrop-filter:blur(8px) !important;
+  border-radius:var(--radius-lg) !important;
+  box-shadow:var(--shadow-md) !important;
+  padding:clamp(16px,2vw,28px) !important;
+  border:1px solid var(--glass-border) !important
+}
+/* 精品线路：恢复毛玻璃 */
+.two{
+  background:var(--glass) !important;
+  backdrop-filter:blur(8px) !important;
+  -webkit-backdrop-filter:blur(8px) !important;
+  border-radius:var(--radius-lg) !important;
+  box-shadow:var(--shadow-md) !important;
+  padding:clamp(16px,2vw,28px) !important;
+  border:1px solid var(--glass-border) !important
+}
+
+/* ── 旅游向导底部装饰三横线 ── */
+.top3::after{
+  content:"";display:block;
+  height:15px;margin:32px auto 0;
+  max-width:320px;
+  background:
+    linear-gradient(90deg,transparent 5%,var(--gold) 20%,var(--gold) 80%,transparent 95%) no-repeat center 0/100% 1px,
+    linear-gradient(90deg,transparent 12%,var(--gold-light) 25%,var(--gold-light) 75%,transparent 88%) no-repeat center 6px/70% 1px,
+    linear-gradient(90deg,transparent 20%,var(--border) 30%,var(--border) 70%,transparent 80%) no-repeat center 12px/40% 1px;
+  opacity:0.6
+}
