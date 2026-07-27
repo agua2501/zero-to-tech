@@ -264,6 +264,33 @@ async def book_route(route_id: int, request: Request):
     conn.commit()
     return {"ok": True, "msg": "预订成功！工作人员将尽快与您联系"}
 
+@app.get("/api/routes/{route_id}/comments")
+async def list_comments(route_id: int):
+    rows = conn.execute("SELECT * FROM comments WHERE route_id = ? ORDER BY created_at DESC", (route_id,)).fetchall()
+    return {"ok": True, "data": rows_to_list(rows)}
+
+@app.get("/api/comments")
+async def list_all_comments():
+    rows = conn.execute("SELECT c.*, r.title as route_title FROM comments c LEFT JOIN routes r ON c.route_id = r.id ORDER BY c.created_at DESC LIMIT 50").fetchall()
+    return {"ok": True, "data": rows_to_list(rows)}
+
+@app.post("/api/routes/{route_id}/comments")
+async def create_comment(route_id: int, request: Request):
+    if not conn.execute("SELECT id FROM routes WHERE id = ?", (route_id,)).fetchone():
+        raise HTTPException(status_code=404, detail={"ok": False, "msg": "线路不存在"})
+    body = await request.json()
+    username = body.get("username", "").strip()
+    content = body.get("content", "").strip()
+    if not username or not content:
+        raise HTTPException(status_code=400, detail={"ok": False, "msg": "请填写用户名和评论内容"})
+    now = datetime.now().strftime("%Y/%m/%d %H:%M:%S")
+    conn.execute(
+        "INSERT INTO comments (route_id, username, content, created_at) VALUES (?, ?, ?, ?)",
+        (route_id, username, content, now)
+    )
+    conn.commit()
+    return {"ok": True, "msg": "评论成功"}
+
 @app.get("/api/news")
 async def list_news():
     rows = conn.execute("SELECT * FROM news ORDER BY date DESC, id DESC").fetchall()

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,16 +9,27 @@
   <link rel="icon" href="img/favicon.png" type="image/png">
   <link rel="stylesheet" href="css/common.css">
   <link rel="stylesheet" href="css/旅游咨询.css">
+  <p>123
+  </p>
 </head>
+
 <body>
   <header class="header">
-    <nav class="nav"><ul class="nav-links">
+    <nav class="nav">
+      <ul class="nav-links">
         <li><a href="./index.html">首页</a></li>
         <li><a href="./茂名概述.html">茂名概况</a></li>
         <li><a href="#" class="active">旅游咨询</a></li>
         <li><a href="./旅游线路.html">旅游线路</a></li>
         <li><a href="js/登录/Login.html" id="navLogin">登录</a></li>
-      </ul><ul id="langSwitcher" class="nav-lang"><li data-lang="zh" class="active">中</li><li data-lang="en">EN</li><li data-lang="ja">日</li><li data-lang="ko">한</li></ul></nav>
+      </ul>
+      <ul id="langSwitcher" class="nav-lang">
+        <li data-lang="zh" class="active">中</li>
+        <li data-lang="en">EN</li>
+        <li data-lang="ja">日</li>
+        <li data-lang="ko">한</li>
+      </ul>
+    </nav>
   </header>
 
   <main class="continer">
@@ -28,11 +40,41 @@
       </div>
       <div class="news-divider"></div>
       <ul class="news-list" id="newsList">
-        <li class="skeleton-item"><div class="skeleton-box"></div><div class="skeleton-lines"><div class="skeleton-line"></div><div class="skeleton-line"></div></div></li>
-        <li class="skeleton-item"><div class="skeleton-box"></div><div class="skeleton-lines"><div class="skeleton-line"></div><div class="skeleton-line"></div></div></li>
-        <li class="skeleton-item"><div class="skeleton-box"></div><div class="skeleton-lines"><div class="skeleton-line"></div><div class="skeleton-line"></div></div></li>
-        <li class="skeleton-item"><div class="skeleton-box"></div><div class="skeleton-lines"><div class="skeleton-line"></div><div class="skeleton-line"></div></div></li>
-        <li class="skeleton-item"><div class="skeleton-box"></div><div class="skeleton-lines"><div class="skeleton-line"></div><div class="skeleton-line"></div></div></li>
+        <li class="skeleton-item">
+          <div class="skeleton-box"></div>
+          <div class="skeleton-lines">
+            <div class="skeleton-line"></div>
+            <div class="skeleton-line"></div>
+          </div>
+        </li>
+        <li class="skeleton-item">
+          <div class="skeleton-box"></div>
+          <div class="skeleton-lines">
+            <div class="skeleton-line"></div>
+            <div class="skeleton-line"></div>
+          </div>
+        </li>
+        <li class="skeleton-item">
+          <div class="skeleton-box"></div>
+          <div class="skeleton-lines">
+            <div class="skeleton-line"></div>
+            <div class="skeleton-line"></div>
+          </div>
+        </li>
+        <li class="skeleton-item">
+          <div class="skeleton-box"></div>
+          <div class="skeleton-lines">
+            <div class="skeleton-line"></div>
+            <div class="skeleton-line"></div>
+          </div>
+        </li>
+        <li class="skeleton-item">
+          <div class="skeleton-box"></div>
+          <div class="skeleton-lines">
+            <div class="skeleton-line"></div>
+            <div class="skeleton-line"></div>
+          </div>
+        </li>
       </ul>
     </div>
   </main>
@@ -72,7 +114,7 @@
 
   <script src="js/main.js"></script>
   <script>
-    (function() {
+    (function () {
       "use strict";
 
       /* ── 根据标题关键词自动分配分类标签 ── */
@@ -97,7 +139,7 @@
       function parseDate(dateStr) {
         var parts = dateStr.split("-");
         if (parts.length < 3) return { day: dateStr, month: "", year: "" };
-        var MONTH_ZH = ["","一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"];
+        var MONTH_ZH = ["", "一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"];
         var m = parseInt(parts[1], 10);
         return {
           day: parts[2],
@@ -135,13 +177,13 @@
       }
 
       /* ── 主逻辑 ── */
-      document.addEventListener("DOMContentLoaded", function() {
+      document.addEventListener("DOMContentLoaded", function () {
         var list = document.getElementById("newsList");
         var count = document.getElementById("newsCount");
 
         fetch("/api/news")
-          .then(function(r) { return r.json(); })
-          .then(function(data) {
+          .then(function (r) { return r.json(); })
+          .then(function (data) {
             if (!data.ok || !data.data || !data.data.length) {
               list.innerHTML = '<li class="news-empty">'
                 + '<span class="news-empty-icon">⌘</span>'
@@ -152,11 +194,11 @@
             }
             var items = data.data;
             if (count) count.textContent = "共 " + items.length + " 条";
-            list.innerHTML = items.map(function(item, idx) {
+            list.innerHTML = items.map(function (item, idx) {
               return renderNewsItem(item, idx);
             }).join("");
           })
-          .catch(function() {
+          .catch(function () {
             list.innerHTML = '<li class="news-empty">'
               + '<span class="news-empty-icon">⚠</span>'
               + '加载失败<br><span style="font-size:12px;opacity:0.6">请确认后端服务已启动</span>'
@@ -167,4 +209,5 @@
     })();
   </script>
 </body>
+
 </html>
