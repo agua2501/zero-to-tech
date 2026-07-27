@@ -2,10 +2,9 @@
    国际化数据
    =========================================== */
 window.__lang = window.__lang || {};
-};
-var L = window.__lang;
+const L = window.__lang;
 
-L.zh = {
+const ZH = {
   nav_home: "首页",
   nav_overview: "茂名概述",
   nav_news: "旅游咨询",
@@ -108,9 +107,7 @@ L.zh = {
   route_card_8_desc: "探秘茂名仙人洞，观赏天然溶洞奇观，体验山林徒步与瀑布清溪，含景区门票和当地农家午餐",
   route_card_9_title: "广东天马山生态旅游景区一日游",
   route_card_9_desc: "登天马山观云海日出，漫步原始森林栈道，探访天马瀑布群，呼吸天然氧吧清新空气，含景区门票和特色午餐",
-};
-
-L.en = {
+const EN = {
   nav_home: "Home",
   nav_overview: "About",
   nav_news: "News",
@@ -215,55 +212,73 @@ L.en = {
   route_card_9_desc: "Hike Tianma Mountain for sea-of-clouds and sunrise views, walk ancient forest boardwalks, discover Tianma Waterfall clusters, and breathe fresh forest air. Includes entrance ticket and lunch.",
 };
 
-// Japan and Korea get simplified fallback
-
+// Assign language data
+window.__lang.zh = ZH;
+window.__lang.en = EN;
+window.__lang.ja = {};
+window.__lang.ko = {};
+for (let k in ZH) { window.__lang.ja[k] = ZH[k]; window.__lang.ko[k] = ZH[k]; }
+window.__lang.ja.nav_home = "ホーム";
+window.__lang.ja.nav_overview = "概要";
+window.__lang.ja.nav_news = "お知らせ";
+window.__lang.ja.nav_routes = "ルート";
+window.__lang.ja.nav_login = "ログイン";
+window.__lang.ja.banner_title = "山海相映、茂名へようこそ";
+window.__lang.ja.sidebar_title = "茂名観光";
+window.__lang.ko.nav_home = "홈";
+window.__lang.ko.nav_overview = "개요";
+window.__lang.ko.nav_news = "소식";
+window.__lang.ko.nav_routes = "코스";
+window.__lang.ko.nav_login = "로그인";
+window.__lang.ko.banner_title = "산과 바다가 어우러진 무명에 오신 것을 환영합니다";
+window.__lang.ko.sidebar_title = "무명 여행";
 
 (function(){"use strict";
   if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",init)}else{init()}
   function init(){buildMobileMenu();buildBackToTop();initScrollReveal();initSmoothLinks();initLoginStatus();initLangSwitcher()}
 
   function buildMobileMenu(){
-    var nav=document.querySelector(".nav");if(!nav||nav.querySelector(".menu-toggle"))return;
-    var t=document.createElement("button");t.className="menu-toggle";t.setAttribute("aria-label","切换菜单");
+    const nav=document.querySelector(".nav");if(!nav||nav.querySelector(".menu-toggle"))return;
+    const t=document.createElement("button");t.className="menu-toggle";t.setAttribute("aria-label","切换菜单");
     t.innerHTML="<span></span><span></span><span></span>";
     t.addEventListener("click",function(){document.querySelector(".nav-links").classList.toggle("menu-open");this.classList.toggle("active")});
     nav.insertBefore(t,nav.firstChild)
   }
 
   function buildBackToTop(){
-    var btn=document.createElement("button");btn.className="back-to-top";btn.setAttribute("aria-label","回到顶部");btn.innerHTML="↑";
+    const btn=document.createElement("button");btn.className="back-to-top";btn.setAttribute("aria-label","回到顶部");btn.innerHTML="↑";
     btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:"smooth"})});document.body.appendChild(btn);
-    var t=false;window.addEventListener("scroll",function(){if(!t){requestAnimationFrame(function(){btn.classList.toggle("visible",window.scrollY>400);t=false});t=true}})
+    let ticking=false;window.addEventListener("scroll",function(){if(!ticking){requestAnimationFrame(function(){btn.classList.toggle("visible",window.scrollY>400);ticking=false});ticking=true}})
   }
 
   function initScrollReveal(){
-    var els=document.querySelectorAll(".one,.two,.top3,.content,.travel-container,.news-list");
+    const els=document.querySelectorAll(".one,.two,.top3,.content,.travel-container,.news-list");
     if(!els.length||!("IntersectionObserver"in window))return;
-    var o=new IntersectionObserver(function(e){e.forEach(function(e){if(e.isIntersecting){e.target.classList.add("reveal-visible");o.unobserve(e.target)}})},{threshold:0.1});
+    const o=new IntersectionObserver(function(e){e.forEach(function(e){if(e.isIntersecting){e.target.classList.add("reveal-visible");o.unobserve(e.target)}})},{threshold:0.1});
     els.forEach(function(e){e.classList.add("reveal-hidden");o.observe(e)})
   }
 
   function initSmoothLinks(){
     document.querySelectorAll(".nav-links a").forEach(function(l){
-      var h=l.getAttribute("href");
+      const h=l.getAttribute("href");
       if(h&&h.indexOf("#")!==0&&h.indexOf("javascript")!==0){
-        l.addEventListener("click",function(e){e.preventDefault();var t=this.getAttribute("href");if(!t)return;document.body.style.opacity="0";document.body.style.transition="opacity 0.25s ease";setTimeout(function(){window.location.href=t},250)})
+        l.addEventListener("click",function(e){e.preventDefault();const t=this.getAttribute("href");if(!t)return;document.body.style.opacity="0";document.body.style.transition="opacity 0.25s ease";setTimeout(function(){window.location.href=t},250)})
       }
     })
   }
 
   function initLoginStatus(){
-    var u=localStorage.getItem("username"),el=document.getElementById("navLogin");
+    const u=localStorage.getItem("username"),el=document.getElementById("navLogin");
     if(u&&el){el.textContent=u+" (退出)";el.href="#";el.addEventListener("click",function(e){e.preventDefault();if(confirm("确定退出登录？")){localStorage.removeItem("token");localStorage.removeItem("username");location.reload()}})}
   }
 
   /* ===== 语言切换 ===== */
-  var currentLang = "zh";
+  let currentLang = "zh";
 
   function initLangSwitcher(){
-    var switcher=document.getElementById("langSwitcher");
+    const switcher=document.getElementById("langSwitcher");
     if(!switcher)return;
-    var items=switcher.querySelectorAll("li");
+    const items=switcher.querySelectorAll("li");
 
     items.forEach(function(item){
       item.addEventListener("click",function(){
@@ -273,7 +288,7 @@ L.en = {
       })
     });
 
-    var saved=localStorage.getItem("preferred_lang");
+        const saved=localStorage.getItem("preferred_lang");
     if(saved&&saved!=="zh"){
       items.forEach(function(i){
         if(i.getAttribute("data-lang")===saved){i.classList.add("active");switchLang(saved)}
@@ -284,16 +299,16 @@ L.en = {
   function switchLang(lang){
     if(!window.__lang||!window.__lang[lang])return;
     currentLang=lang;
-    var t=window.__lang[lang];
+    const t=window.__lang[lang];
 
     // Navigation
     setNavText(t);
     // Banner
-    var bp=document.querySelector(".banner>p");
+    const bp=document.querySelector(".banner>p");
     if(bp&&t.banner_title)bp.textContent=t.banner_title;
     // Sidebar
     setText(".one>.left>h2",t.sidebar_title);
-    var sideItems=document.querySelectorAll(".one>.left>ul>li");
+    const sideItems=document.querySelectorAll(".one>.left>ul>li");
     if(sideItems.length>=6){
       if(t.sidebar_1)sideItems[0].textContent=t.sidebar_1;
       if(t.sidebar_2)sideItems[1].textContent=t.sidebar_2;
@@ -304,15 +319,15 @@ L.en = {
     }
     // News
     setText(".news_left",t.news_title);
-    var newsMore=document.querySelector(".news_right a");
+    const newsMore=document.querySelector(".news_right a");
     if(newsMore&&t.news_more)newsMore.textContent=t.news_more;
-    var newsItems=document.querySelectorAll(".one>.right>ul>li");
+    const newsItems=document.querySelectorAll(".one>.right>ul>li");
     if(newsItems.length>=8){
-      for(var i=0;i<8;i++){var key="news_"+(i+1);if(t[key])newsItems[i].textContent=t[key]}
+      for(let i=0;i<8;i++){const key="news_"+(i+1);if(t[key])newsItems[i].textContent=t[key]}
     }
     // Routes section
     setText(".twoleft>.top>.title",t.route_title);
-    var tags=document.querySelectorAll(".twoleft>.top>.item");
+    const tags=document.querySelectorAll(".twoleft>.top>.item");
     if(tags.length>=5){
       if(t.route_tag1)tags[0].textContent=t.route_tag1;
       if(t.route_tag2)tags[1].textContent=t.route_tag2;
@@ -322,8 +337,8 @@ L.en = {
     }
     setText(".twoleft>.top>.more>a",t.route_more);
     // Route items
-    var routeTitles=document.querySelectorAll(".bottomright .itemRight h3");
-    var routeDescs=document.querySelectorAll(".bottomright .itemRight p");
+    const routeTitles=document.querySelectorAll(".bottomright .itemRight h3");
+    const routeDescs=document.querySelectorAll(".bottomright .itemRight p");
     if(routeTitles.length>=3){
       if(t.route_item1_title)routeTitles[0].textContent=t.route_item1_title;
       if(t.route_item2_title)routeTitles[1].textContent=t.route_item2_title;
@@ -335,13 +350,13 @@ L.en = {
       if(t.route_item3_desc)routeDescs[2].textContent=t.route_item3_desc;
     }
     // World item
-    var worldTitle=document.querySelector(".world>.title");
+    const worldTitle=document.querySelector(".world>.title");
     if(worldTitle&&t.route_item1_title){
       worldTitle.innerHTML=worldTitle.innerHTML.replace(/[^>]*$/,t.route_item1_title)
     }
     // Guide
     setText(".guide",t.guide_title);
-    var guideLabels=document.querySelectorAll(".top3>.area>.item>span");
+    const guideLabels=document.querySelectorAll(".top3>.area>.item>span");
     if(guideLabels.length>=5){
       if(t.guide_scene)guideLabels[0].textContent=t.guide_scene;
       if(t.guide_route)guideLabels[1].textContent=t.guide_route;
@@ -351,10 +366,10 @@ L.en = {
     }
     // Footer
     setText(".footer-col:nth-child(1) h4",t.footer_about_title);
-    var aboutP=document.querySelector(".footer-col:nth-child(1) p");
+    const aboutP=document.querySelector(".footer-col:nth-child(1) p");
     if(aboutP&&t.footer_about)aboutP.textContent=t.footer_about;
     setText(".footer-col:nth-child(2) h4",t.footer_links_title);
-    var fLinks=document.querySelectorAll(".footer-col:nth-child(2) a");
+    const fLinks=document.querySelectorAll(".footer-col:nth-child(2) a");
     if(fLinks.length>=4){
       if(t.footer_link_home)fLinks[0].textContent=t.footer_link_home;
       if(t.footer_link_overview)fLinks[1].textContent=t.footer_link_overview;
@@ -362,39 +377,39 @@ L.en = {
       if(t.footer_link_routes)fLinks[3].textContent=t.footer_link_routes;
     }
     setText(".footer-col:nth-child(3) h4",t.footer_contact_title);
-    var contactP=document.querySelector(".footer-col:nth-child(3) p");
+    const contactP=document.querySelector(".footer-col:nth-child(3) p");
     if(contactP&&t.footer_contact)contactP.innerHTML=t.footer_contact;
     setText(".footer-bottom p",t.footer_copyright);
 
         // 旅游线路 page
     if(document.querySelector(".travel-container")){
-      var rh=document.querySelector(".travel-container h2");
+      const rh=document.querySelector(".travel-container h2");
       if(rh&&t.route_title)rh.textContent=t.route_title;
     }
     // 旅游咨询 page
     if(document.querySelector(".page-title")){
-      var pt=document.querySelector(".page-title span")||document.querySelector(".page-title");
+      const pt=document.querySelector(".page-title span")||document.querySelector(".page-title");
       if(pt&&t.nav_news)pt.textContent=t.nav_news;
     // Guide sub-items
     if(document.querySelector(".top3")){
-      var cats=["scene","route","food","hotel","shop"];
-      for(var ci=0;ci<5;ci++){
-        var items=document.querySelectorAll(".top3>.area>.item:nth-child("+(ci+1)+") ul li");
-        for(var si=0;si<items.length;si++){var gk="guide_"+cats[ci]+"_"+(si+1);if(t[gk])items[si].textContent=t[gk]}
+      const cats=["scene","route","food","hotel","shop"];
+      for(let ci=0;ci<5;ci++){
+        const items=document.querySelectorAll(".top3>.area>.item:nth-child("+(ci+1)+") ul li");
+        for(let si=0;si<items.length;si++){const gk="guide_"+cats[ci]+"_"+(si+1);if(t[gk])items[si].textContent=t[gk]}
       }
     }
     // Overview page
     if(document.querySelector(".content")){
-      var oh=document.querySelector(".content h1");
+      const oh=document.querySelector(".content h1");
       if(oh&&t.overview_title)oh.textContent=t.overview_title;
-      var of=document.querySelector(".content > .from");
+      const of=document.querySelector(".content > .from");
       if(of&&t.overview_from)of.textContent=t.overview_from;
     }
     }    localStorage.setItem("preferred_lang",lang);
   }
 
   function setNavText(t){
-    var links=document.querySelectorAll(".nav-links a");
+    const links=document.querySelectorAll(".nav-links a");
     if(links.length>=5){
       if(t.nav_home)links[0].textContent=t.nav_home;
       if(t.nav_overview)links[1].textContent=t.nav_overview;
@@ -406,7 +421,7 @@ L.en = {
   }
 
   function setText(sel,val){
-    var el=document.querySelector(sel);
+    const el=document.querySelector(sel);
     if(el&&val)el.textContent=val
   }
 })();

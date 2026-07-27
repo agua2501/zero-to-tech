@@ -47,7 +47,16 @@
 
 @media(max-width:768px){
   .continer{width:95%}
-  .content{padding:16px}
-  .content>.img{float:none;width:100%;margin:16px 0}
-  .content>p{margin:10px 0}
+  .content{padding:14px}
+  .content>.img{float:none;width:100%;margin:12px 0}
+  .content>h1{font-size:22px}
+  .content>p{font-size:14px;text-indent:1.6em;margin:10px 0;padding:0}
+}
+@media(max-width:480px){
+  .continer{width:98%;margin:12px auto 0;padding-bottom:40px}
+  .content{padding:10px}
+  .content>h1{font-size:19px}
+  .content>.from{font-size:12px;margin-bottom:16px}
+  .content>p{font-size:13.5px;text-indent:1.4em;margin:8px 0;line-height:1.8}
+  .content>.img .breadcrumb{font-size:11px;top:8px;left:8px;padding:4px 8px}
 }

@@ -134,18 +134,65 @@
 
 /* ===== 响应式 ===== */
 @media (max-width: 768px) {
-  .travel-container h2 { font-size: 22px; }
-  .filter-bar { flex-direction: column; align-items: stretch; padding: 16px; }
-  .filter-group { width: 100%; }
+  .travel-container { padding: 16px 12px; }
+  .travel-container h2 { font-size: 20px; margin-bottom: 20px; }
+  .filter-bar { flex-direction: column; align-items: stretch; padding: 14px; gap:10px; }
+  .filter-group { width: 100%; flex-direction: column; align-items: flex-start; gap: 4px; }
+  .filter-group label { font-size: 13px; }
   .filter-group select { width: 100%; }
-  .route-list { grid-template-columns: 1fr; gap: 18px; }
+  .route-list { grid-template-columns: 1fr; gap: 14px; }
   .route-card img { height: 170px; }
+  .route-info { padding: 14px; }
+  .route-info h3 { font-size: 15px; }
+  .route-info .description { font-size: 13px; -webkit-line-clamp: 2; }
+  .route-info .price { font-size: 18px; }
+  .route-info .price .unit { font-size: 12px; }
 }
 
 @media (max-width: 480px) {
-  .travel-container { padding: 16px 8px; }
-  .route-info { padding: 16px; }
-  .route-info h3 { font-size: 15px; }
+  .travel-container { padding: 12px 6px; }
+  .travel-container h2 { font-size: 18px; }
+  .route-list { gap: 10px; }
+  .route-card img { height: 150px; }
+  .route-info { padding: 12px; }
+  .route-info h3 { font-size: 14px; margin-bottom: 4px; }
+  .route-info .days { font-size: 12px; }
+  .route-info .description { font-size: 12px; -webkit-line-clamp: 2; margin-bottom: 10px; }
+  .route-info .price { font-size: 17px; margin-bottom: 10px; }
+  .book-btn { padding: 10px 0; font-size: 14px; }
+}
+
+/* ── 评论模块移动端优化 ── */
+@media(max-width:768px){
+  .comments-section{margin-top:28px;padding-top:20px}
+  .comments-header h3{font-size:16px}
+  .comment-item{gap:10px;padding:12px 0}
+  .comment-avatar{width:32px;height:32px;font-size:13px;flex-shrink:0}
+  .comment-name{font-size:13px}
+  .comment-text{font-size:13px}
+  .comment-form{padding:14px}
+  .comment-input,.comment-textarea{font-size:13px;padding:8px 10px}
+}
+@media(max-width:480px){
+  .comments-section{margin-top:20px;padding-top:16px}
+  .comment-item{padding:10px 0}
+  .comment-avatar{width:28px;height:28px;font-size:11px}
+  .comment-body .comment-meta{flex-wrap:wrap;gap:6px}
+  .comment-date{font-size:11px;margin-left:0;width:auto}
+  .comment-form{padding:12px}
+  .comment-submit{width:100%;text-align:center}
+  .comment-form-actions{flex-direction:column;align-items:stretch}
+  .comment-form-hint{text-align:center;font-size:12px}
+}
+
+/* ── 模态框移动端优化 ── */
+@media(max-width:480px){
+  .modal-box{padding:16px;margin:12px;width:100%}
+  .modal-field{margin-bottom:10px}
+  .modal-field label{font-size:12px}
+  .modal-field input,.modal-field textarea{font-size:13px;padding:8px 10px}
+  .modal-actions{gap:8px}
+  .modal-actions button{font-size:13px;padding:9px 0}
 }
 
 /* ===========================================

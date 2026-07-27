@@ -49,16 +49,24 @@ def init_db():
             date TEXT NOT NULL
         );
         CREATE TABLE IF NOT EXISTS bookings (
+           id INTEGER PRIMARY KEY AUTOINCREMENT,
+           route_id INTEGER NOT NULL,
+           user_id INTEGER,
+           customer_name TEXT NOT NULL,
+           phone TEXT NOT NULL,
+           people INTEGER DEFAULT 1,
+           remark TEXT DEFAULT '',
+           created_at TEXT,
+           FOREIGN KEY (route_id) REFERENCES routes(id),
+           FOREIGN KEY (user_id) REFERENCES users(id)
+       );
+        CREATE TABLE IF NOT EXISTS comments (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             route_id INTEGER NOT NULL,
-            user_id INTEGER,
-            customer_name TEXT NOT NULL,
-            phone TEXT NOT NULL,
-            people INTEGER DEFAULT 1,
-            remark TEXT DEFAULT '',
+            username TEXT NOT NULL,
+            content TEXT NOT NULL,
             created_at TEXT,
-            FOREIGN KEY (route_id) REFERENCES routes(id),
-            FOREIGN KEY (user_id) REFERENCES users(id)
+            FOREIGN KEY (route_id) REFERENCES routes(id)
         );
     """)
     cur = conn.execute("SELECT COUNT(*) FROM routes")

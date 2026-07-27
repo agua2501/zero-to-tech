@@ -143,7 +143,113 @@
     </div>
   </footer>
 
-  <script src="js/main.js"></script>
+ <script src="js/main.js"></script>
+  <!-- ── 预订模态框 ── -->
+  <div class="modal-overlay" id="bookingModal">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeBookingModal()">&times;</button>
+      <h3>预订线路</h3>
+      <div class="route-name" id="modalRouteName"></div>
+      <div class="modal-field">
+        <label for="modalName">姓名 *</label>
+        <input type="text" id="modalName" placeholder="请输入您的姓名" maxlength="20">
+      </div>
+      <div class="modal-field">
+        <label for="modalPhone">电话 *</label>
+        <input type="tel" id="modalPhone" placeholder="请输入您的手机号码" maxlength="15">
+      </div>
+      <div class="modal-field">
+        <label for="modalPeople">人数</label>
+        <input type="number" id="modalPeople" value="1" min="1" max="50">
+      </div>
+      <div class="modal-field">
+        <label for="modalRemark">备注</label>
+        <textarea id="modalRemark" placeholder="其他需求，如特殊饮食等" rows="2"></textarea>
+      </div>
+      <div class="modal-error" id="modalError"></div>
+      <div class="modal-actions">
+        <button class="modal-cancel" onclick="closeBookingModal()">取消</button>
+        <button class="modal-submit" id="modalSubmitBtn" onclick="submitBooking()">确认预订</button>
+      </div>
+    </div>
+  </div>
+  <script>
+  /* ── 预订模态框 ── */
+  let bookingRouteId = null;
+
+  function openBookingModal(routeId, routeName) {
+    bookingRouteId = routeId;
+    document.getElementById("modalRouteName").textContent = routeName;
+    const savedUser = localStorage.getItem("username");
+    document.getElementById("modalName").value = savedUser || "";
+    document.getElementById("modalPhone").value = "";
+    document.getElementById("modalPeople").value = "1";
+    document.getElementById("modalRemark").value = "";
+    document.getElementById("modalError").textContent = "";
+    document.getElementById("modalSubmitBtn").disabled = false;
+    document.getElementById("modalSubmitBtn").textContent = "确认预订";
+    document.getElementById("bookingModal").classList.add("active");
+  }
+
+  function closeBookingModal() {
+    document.getElementById("bookingModal").classList.remove("active");
+    bookingRouteId = null;
+  }
+
+  function submitBooking() {
+    const name = document.getElementById("modalName").value.trim();
+    const phone = document.getElementById("modalPhone").value.trim();
+    const people = parseInt(document.getElementById("modalPeople").value) || 1;
+    const remark = document.getElementById("modalRemark").value.trim();
+    const errEl = document.getElementById("modalError");
+    const btn = document.getElementById("modalSubmitBtn");
+
+    if (!name) { errEl.textContent = "请输入姓名"; return; }
+    if (!phone) { errEl.textContent = "请输入电话"; return; }
+    if (!/^1\d{10}$/.test(phone) && !/^\d{3,4}-?\d{7,8}$/.test(phone)) {
+      errEl.textContent = "请输入有效的手机或固话号码";
+      return;
+    }
+
+    errEl.textContent = "";
+    btn.disabled = true;
+    btn.textContent = "提交中...";
+
+    fetch("/api/routes/" + bookingRouteId + "/book", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Authorization": "Bearer " + (localStorage.getItem("token") || "") },
+      body: JSON.stringify({ name: name, phone: phone, people: people, remark: remark })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data.ok) {
+        alert(data.msg || "预订成功！");
+        closeBookingModal();
+      } else {
+        errEl.textContent = data.msg || "预订失败";
+        btn.disabled = false;
+        btn.textContent = "确认预订";
+      }
+    })
+    .catch(function() {
+      errEl.textContent = "预订失败，请确认服务已启动";
+      btn.disabled = false;
+      btn.textContent = "确认预订";
+    });
+  }
+
+  /* ── 替换原来的 prompt / alert 预订 ── */
+  function initBooking() {
+    document.addEventListener("click", function (e) {
+      const btn = e.target.closest(".book-btn");
+      if (!btn) return;
+      const id = btn.getAttribute("data-id");
+      const card = btn.closest(".route-card");
+      const title = card ? card.querySelector("h3").textContent : "线路详情";
+      openBookingModal(id, title);
+    });
+  }
+  </script>
   <script>
     var allRoutes = [];
 
@@ -413,31 +519,32 @@
       });
     }
 
-    function initBooking() {
-      document.addEventListener("click", function (e) {
-        var btn = e.target.closest(".book-btn");
-        if (!btn) return;
-        var id = btn.getAttribute("data-id");
-        var name = prompt("请输入您的姓名：");
-        if (!name) return;
-        var phone = prompt("请输入您的电话：");
-        if (!phone) return;
-
-        fetch("/api/routes/" + id + "/book", {
-          method: "POST",
-          headers: { "Content-Type": "application/json", "Authorization": "Bearer " + (localStorage.getItem("token") || "") },
-          body: JSON.stringify({ name: name, phone: phone, people: 1 })
-        })
-          .then(function (r) { return r.json(); })
-          .then(function (data) {
-            alert(data.msg || "预订成功");
-          })
-          .catch(function () {
-            alert("预订失败，请确认服务已启动");
-          });
-      });
-    }
   </script>
 </body>
 
 </html>
+<style>
+/* ── 预订模态框 ── */
+.modal-overlay{display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.45);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);justify-content:center;align-items:center;animation:fadeIn .25s ease}
+.modal-overlay.active{display:flex}
+.modal-box{background:var(--white);border-radius:var(--radius-lg);box-shadow:0 20px 60px rgba(0,0,0,.15);padding:clamp(20px,3vw,32px);width:min(92%,420px);max-height:90vh;overflow-y:auto;animation:slideUp .3s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.modal-close{float:right;background:none;border:none;font-size:22px;color:var(--text-muted);cursor:pointer;transition:color .2s}
+.modal-close:hover{color:var(--text)}
+.modal-box h3{font-size:clamp(16px,1.2vw,18px);color:var(--navy);margin-bottom:4px}
+.modal-box .route-name{font-size:13px;color:var(--text-muted);margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.modal-field{margin-bottom:14px}
+.modal-field label{display:block;font-size:13px;font-weight:500;color:var(--text);margin-bottom:4px}
+.modal-field input,.modal-field textarea{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:14px;font-family:inherit;transition:border-color .3s,box-shadow .3s}
+.modal-field input:focus,.modal-field textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(1,118,178,.08)}
+.modal-field textarea{resize:vertical;min-height:60px}
+.modal-error{font-size:12.5px;color:#D4504C;margin-bottom:10px;min-height:18px}
+.modal-actions{display:flex;gap:10px;margin-top:4px}
+.modal-actions button{flex:1;padding:10px 0;border-radius:var(--radius-sm);font-size:14px;font-weight:500;cursor:pointer;transition:all .3s;border:none}
+.modal-cancel{background:var(--cream);color:var(--text-light)}
+.modal-cancel:hover{background:#e8e6e0}
+.modal-submit{background:var(--blue);color:#fff}
+.modal-submit:hover{background:var(--blue-dark);box-shadow:0 3px 12px rgba(1,118,178,.2)}
+.modal-submit:disabled{opacity:.5;cursor:not-allowed}
+</style>

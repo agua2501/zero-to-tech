@@ -3,7 +3,8 @@
    =================================================== */
 :root{--navy:#0F1A2E;--navy-light:#1B2A47;--blue:#0176B2;--blue-dark:#015A8A;--gold:#C4A35A;--gold-light:#E8D5A3;--cream:#F5F3EE;--cream-light:#FAF9F6;--white:#FFF;--text:#1E1E2E;--text-light:#5A5A6E;--text-muted:#8E8E9E;--border:rgba(0,0,0,0.06);--glass:rgba(255,255,255,0.88);--glass-border:rgba(255,255,255,0.15);--shadow-sm:0 1px 3px rgba(0,0,0,0.04);--shadow-md:0 6px 20px rgba(0,0,0,0.06);--shadow-lg:0 12px 40px rgba(0,0,0,0.08);--radius-sm:6px;--radius-md:12px;--radius-lg:20px;--radius-xl:28px;--font:"Inter",-apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans SC","Microsoft Yahei",sans-serif;--font-display:"Georgia","Noto Serif SC","Source Han Serif SC",serif;--transition:all 0.35s cubic-bezier(0.4,0,0.2,1)}
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:var(--font);background:var(--cream);background-image:url(../img/245.jpg);background-repeat:no-repeat;background-size:cover;background-attachment:fixed;color:var(--text);line-height:1.7;-webkit-font-smoothing:antialiased}
+html{overflow-x:hidden;-webkit-text-size-adjust:100%}
+body{font-family:var(--font);background:var(--cream);background-image:url(../img/245.jpg);background-repeat:no-repeat;background-size:cover;background-attachment:fixed;color:var(--text);line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:hidden;width:100%}
 a{text-decoration:none;color:inherit;transition:var(--transition)}
 img{max-width:100%;height:auto;display:block}
 ul{list-style:none}
@@ -40,6 +41,10 @@ ul{list-style:none}
 /* 汉堡菜单 */
 .menu-toggle{display:none;background:none;border:none;cursor:pointer;padding:12px;z-index:105}
 .menu-toggle span{display:block;width:20px;height:2px;background:rgba(255,255,255,0.8);margin:5px 0;border-radius:2px;transition:var(--transition)}
+@media(max-width:900px){
+  .menu-toggle{padding:14px}
+  .menu-toggle span{width:22px;margin:6px 0}
+}
 .menu-toggle.active span:nth-child(1){transform:rotate(45deg)translate(5px,5px)}
 .menu-toggle.active span:nth-child(2){opacity:0}
 .menu-toggle.active span:nth-child(3){transform:rotate(-45deg)translate(5px,-5px)}
@@ -84,24 +89,30 @@ ul{list-style:none}
 .reveal-visible{opacity:1;transform:translateY(0)}
 
 @media(max-width:900px){
-  .nav{height:auto;min-height:48px;flex-wrap:wrap;padding:0 8px}
-  .menu-toggle{display:block;position:absolute;right:8px;top:11px}
-  .nav-links{display:none;width:100%;flex-direction:column;padding:0;gap:0;margin:48px 0 0;background:var(--blue-dark);border-radius:0 0 var(--radius-md) var(--radius-md)}
+  .nav{height:auto;min-height:56px;flex-wrap:wrap;padding:0 4px 0 0}
+  .menu-toggle{display:flex;align-items:center;justify-content:center;position:absolute;right:4px;top:8px;min-width:44px;min-height:44px}
+  .nav-links{display:none;width:100%;flex-direction:column;padding:0;gap:0;margin:56px 0 0;background:var(--blue-dark);border-radius:0 0 var(--radius-md) var(--radius-md);position:absolute;top:0;left:0;z-index:99}
   .nav-links.menu-open{display:flex}
   .nav-links>li{width:100%;height:auto}
-  .nav-links>li>a{padding:14px 20px;font-size:14px;border-bottom:1px solid rgba(255,255,255,0.06)}
+  .nav-links>li>a{padding:16px 20px;font-size:15px;border-bottom:1px solid rgba(255,255,255,0.06);min-height:48px}
   .nav-links>li>a::after{display:none}
   .nav-links>li>a.active{background:rgba(196,163,90,.12);color:var(--gold)}
   .nav-lang{display:none}
-  .header>img{top:8px;left:10px;width:42px}
+  .header>img{top:10px;left:12px;width:40px;z-index:101}
 }
 
 @media(max-width:480px){
-  .continer{width:94%;margin-top:-24px;padding-bottom:60px}
-  .continer>*{padding:16px;margin-bottom:16px;border-radius:var(--radius-md)}
-  .banner{height:200px}
-  .banner>p{font-size:18px;margin-left:16px;max-width:90%}
+  .continer{width:96%;margin-top:-40px;padding-bottom:40px}
+  .continer>*{padding:14px;margin-bottom:12px;border-radius:var(--radius-md)}
+  .banner{height:180px}
+  .banner>p{font-size:17px;margin-left:16px;max-width:92%;letter-spacing:1px}
   .banner>p::after{margin-top:12px;width:40px}
+  .nav{min-height:48px}
+  .nav-links{margin:48px 0 0}
+  .menu-toggle{top:4px}
   .footer-inner{flex-direction:column;gap:24px}
+  .footer-col{min-width:auto;width:100%}
+  .footer-col p,.footer-col li{font-size:13px}
+  .footer-bottom-inner{flex-direction:column;text-align:center;gap:8px}
   .back-to-top{bottom:20px;right:20px;width:36px;height:36px;font-size:14px}
 }

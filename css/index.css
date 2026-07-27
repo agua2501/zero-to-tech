@@ -14,7 +14,7 @@
 .one>.center{flex:1 1 280px;min-height:400px;overflow:hidden;position:relative;border-radius:var(--radius-md);background:#dde0e4}
 
 /* 右侧 */
-.one>.right{flex:0 0 clamp(200px,20vw,240px);padding:16px;margin-top:4px}
+.one>.right{flex:0 0 240px;padding:16px 12px;margin-top:4px}
 .one>.right>.news{display:flex;align-items:center;justify-content:space-between;padding-bottom:12px;border-bottom:2px solid rgba(0,0,0,0.06);margin-bottom:10px}
 .one>.right>.news>.news_left{font-weight:700;font-size:clamp(14px,1.1vw,15px);color:var(--text);position:relative}
 .one>.right>.news>.news_left::after{content:"";position:absolute;bottom:-12px;left:0;width:28px;height:2px;background:var(--gold)}
@@ -75,11 +75,11 @@
 .top3>.area>.item>ul>li{font-size:clamp(10px,0.8vw,11px);color:rgba(255,255,255,0.9);padding:2px 7px;background:rgba(255,255,255,0.15);border-radius:8px;line-height:1.6}
 
 /* 轮播图 */
-#homeCarousel{position:relative;width:100%;height:100%;min-height:400px;overflow:hidden}
-.carousel-track{position:relative;width:100%;height:100%;min-height:400px}
+#homeCarousel{position:relative;width:100%;height:100%;min-height:340px;overflow:hidden}
+.carousel-track{position:relative;width:100%;height:100%;min-height:340px}
 .carousel-slide{position:absolute;top:0;left:0;width:100%;height:100%;opacity:0;transition:opacity .6s ease;z-index:1}
 .carousel-slide.active{opacity:1;z-index:2}
-.carousel-slide img{width:100%;height:100%;min-height:400px;object-fit:cover;display:block}
+.carousel-slide img{width:100%;height:100%;object-fit:cover;display:block}
 .carousel-slide .carousel-caption{position:absolute;bottom:12px;left:14px;color:#fff;font-size:clamp(13px,1.2vw,15px);text-shadow:0 1px 6px rgba(0,0,0,.5);z-index:3;background:rgba(0,0,0,.35);padding:4px 12px;border-radius:4px;backdrop-filter:blur(4px)}
 .carousel-btn{position:absolute;top:50%;transform:translateY(-50%);z-index:10;background:rgba(0,0,0,.3);color:#fff;border:none;width:32px;height:44px;font-size:16px;cursor:pointer;transition:var(--transition);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
 .carousel-btn:hover{background:rgba(0,0,0,.55)}
@@ -92,8 +92,10 @@
 /* 响应式 */
 @media(max-width:992px){
   .two{flex-direction:column}
+  .two>.twoleft{flex:1 1 auto}
   .two>.twoRight{flex-direction:row;flex-basis:auto}
   .two>.twoRight>.item{flex:1;aspect-ratio:3/1;min-height:70px}
+  .two>.twoRight>.item{min-height:80px}
   .twoleft>.bottom{flex-direction:column}
   .bottomleft{flex-basis:auto}
   .bottomleft>.pic{min-height:100px}
@@ -101,10 +103,32 @@
 }
 @media(max-width:768px){
   .one{flex-direction:column}
-  .one>.left,.one>.right{flex-basis:auto;width:100%}
-  .one>.center{min-height:280px}
+  .one>.left,.one>.right{flex:1 1 auto;width:100%}
+  .one>.center{min-height:240px;flex:1 1 auto}
+  #homeCarousel{min-height:240px}
+  .carousel-track{min-height:240px}
   .one>.right>ul>li{white-space:normal}
+  .one>.right{padding:12px 8px}
+  .one>.right>ul>li{padding:6px 0 6px 14px;line-height:1.6}
   .top3>.area{grid-template-columns:repeat(2,1fr)}
+  .top3>.area>.item{max-width:100%}
+  .bottomright>.top2Right>.item img{width:70px;height:60px}
+  .bottomleft>.pic{min-height:80px}
+}
+@media(max-width:480px){
+  .two>.twoRight{flex-direction:column;flex:1 1 auto}
+  .two>.twoRight>.item{aspect-ratio:16/9;min-height:70px}
+  .top3>.area{gap:8px}
+  .top3>.area>.item>ul{padding:6px}
+  .top3>.area>.item>ul>li{font-size:10px;padding:2px 5px}
+  .bottomright>.top2Right>.item{padding:10px 8px;gap:10px}
+  .bottomright>.top2Right>.item img{width:60px;height:50px}
+  .twoleft>.top{padding:10px 8px;gap:6px}
+  .twoleft>.top>.item{font-size:12px;padding:3px 10px}
+  .twoleft>.top>.title{font-size:14px}
+  .one>.center{min-height:200px}
+  #homeCarousel{min-height:200px}
+  .carousel-track{min-height:200px}
 }
 @media(max-width:480px){
   .top3>.area{grid-template-columns:1fr;justify-items:center}
