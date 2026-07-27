@@ -1,0 +1,256 @@
+/* ===========================================
+   旅游资讯页样式 v3 — 编辑式时间线设计
+   =========================================== */
+.continer{width:min(80%,1100px);margin:20px auto 0;padding-bottom:80px}
+
+/* ── 整体玻璃卡片容器 ── */
+.news-card{
+  overflow:hidden;
+  padding:0!important
+}
+
+/* ── 页面标题 ── */
+.news-card .page-title{
+  display:flex;align-items:center;gap:14px;
+  padding:clamp(24px,3vw,36px) clamp(24px,3vw,36px) 0;
+  font-size:clamp(20px,1.6vw,26px);font-weight:600;
+  color:var(--navy);
+  letter-spacing:1px
+}
+.news-card .page-title .count{
+  font-size:clamp(12px,0.85vw,13px);
+  font-weight:400;color:var(--text-muted);
+  letter-spacing:0;margin-left:auto
+}
+
+/* ── 标题与列表之间的分割线 ── */
+.news-divider{
+  height:1px;
+  background:linear-gradient(90deg,var(--border) 0%,var(--border) 60%,transparent 100%);
+  margin:clamp(18px,2vw,24px) clamp(24px,3vw,36px) 0
+}
+
+/* ── 新闻列表容器 ── */
+.news-list{
+  padding:0!important;
+  margin:0!important;
+  background:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+  box-shadow:none!important;
+  border:none!important;
+  border-radius:0!important
+}
+.news-list .news-empty{
+  text-align:center;padding:80px 20px;
+  color:var(--text-muted);font-size:14px;
+  line-height:2
+}
+.news-empty-icon{
+  display:block;font-size:36px;margin-bottom:12px;
+  opacity:0.3;font-weight:200
+}
+
+/* ── 新闻项：时间线行 ── */
+.news-item{
+  display:flex;align-items:stretch;gap:0;
+  list-style:none;
+  transition:background 0.45s cubic-bezier(0.4,0,0.2,1);
+  position:relative;
+  cursor:default;
+  opacity:0;transform:translateY(12px);
+  animation:news-fade-in 0.5s cubic-bezier(0.25,0.1,0.15,1) forwards
+}
+.news-item:nth-child(1){animation-delay:0.05s}
+.news-item:nth-child(2){animation-delay:0.10s}
+.news-item:nth-child(3){animation-delay:0.15s}
+.news-item:nth-child(4){animation-delay:0.20s}
+.news-item:nth-child(5){animation-delay:0.25s}
+.news-item:nth-child(6){animation-delay:0.30s}
+.news-item:nth-child(7){animation-delay:0.35s}
+.news-item:nth-child(8){animation-delay:0.40s}
+.news-item:nth-child(9){animation-delay:0.45s}
+.news-item:nth-child(10){animation-delay:0.50s}
+
+@keyframes news-fade-in{
+  to{opacity:1;transform:translateY(0)}
+}
+
+.news-item:not(:last-child)::after{
+  content:"";position:absolute;left:calc(50px + 28px);top:56px;bottom:0;
+  width:1px;
+  background:linear-gradient(180deg,var(--gold) 0%,var(--gold) 4px,var(--border) 4px,var(--border) 100%);
+  opacity:0.25
+}
+.news-item:last-child::after{display:none}
+
+.news-item::before{
+  content:"";position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:var(--blue);opacity:0;
+  transition:opacity 0.35s cubic-bezier(0.4,0,0.2,1)
+}
+.news-item:hover::before{opacity:1}
+.news-item:hover{background:rgba(1,118,178,0.025)}
+.news-item:hover .news-title{color:var(--blue)}
+.news-item:hover .news-date-box{
+  border-color:rgba(1,118,178,0.25);
+  background:rgba(1,118,178,0.04)
+}
+
+/* ── 日期列 ── */
+.news-date-col{
+  flex:0 0 100px;
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:flex-start;padding-top:16px;
+  position:relative;z-index:1
+}
+.news-date-box{
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;
+  width:54px;height:54px;
+  border-radius:var(--radius-md);
+  border:1px solid var(--border);
+  background:var(--white);
+  transition:all 0.35s cubic-bezier(0.4,0,0.2,1)
+}
+.news-date-day{
+  font-size:clamp(17px,1.2vw,21px);font-weight:700;
+  line-height:1.15;color:var(--navy);
+  letter-spacing:-0.5px
+}
+.news-date-month{
+  font-size:clamp(8px,0.6vw,10px);
+  font-weight:500;color:var(--text-muted);
+  text-transform:uppercase;letter-spacing:1.5px
+}
+.news-date-year{
+  font-size:10px;color:var(--text-muted);
+  margin-top:4px;letter-spacing:0.5px;opacity:0.4
+}
+
+/* ── 内容列 ── */
+.news-content-col{
+  flex:1;min-width:0;
+  padding:16px clamp(16px,2.5vw,28px) 16px 14px;
+  border-bottom:1px solid var(--border);
+  display:flex;flex-direction:column;
+  justify-content:center;gap:5px
+}
+.news-item:last-child .news-content-col{border-bottom:none}
+.news-item:last-child{padding-bottom:clamp(8px,1vw,12px)}
+
+.news-tag-row{
+  display:flex;align-items:center;gap:8px
+}
+.news-tag{
+  display:inline-flex;align-items:center;
+  padding:2px 10px;border-radius:20px;
+  font-size:clamp(10px,0.7vw,11px);
+  font-weight:500;letter-spacing:0.3px;
+  line-height:1.6
+}
+.news-tag-blue{background:rgba(1,118,178,0.08);color:var(--blue)}
+.news-tag-green{background:rgba(16,163,127,0.08);color:#10A37F}
+.news-tag-amber{background:rgba(196,163,90,0.12);color:#8B7A3E}
+.news-tag-rose{background:rgba(180,70,90,0.08);color:#B4465A}
+.news-tag-purple{background:rgba(120,80,180,0.08);color:#7850B4}
+.news-tag-sky{background:rgba(0,150,200,0.08);color:#0096C8}
+.news-tag-teal{background:rgba(0,160,150,0.08);color:#00A096}
+
+.news-title{
+  font-size:clamp(14.5px,1.1vw,16px);
+  font-weight:500;color:var(--text);
+  line-height:1.5;letter-spacing:0.2px;
+  transition:color 0.3s ease;
+  display:-webkit-box;-webkit-line-clamp:2;
+  -webkit-box-orient:vertical;overflow:hidden
+}
+.news-title a{
+  color:inherit;text-decoration:none
+}
+
+.news-meta{
+  display:flex;align-items:center;gap:10px;
+  font-size:clamp(11px,0.8vw,12px);color:var(--text-muted)
+}
+.news-meta .dot{
+  width:3px;height:3px;border-radius:50%;
+  background:var(--text-muted);opacity:0.25
+}
+.news-meta .read-more{
+  margin-left:auto;
+  font-size:11px;color:var(--blue);
+  opacity:0;transform:translateX(-6px);
+  transition:all 0.35s cubic-bezier(0.4,0,0.2,1)
+}
+.news-item:hover .read-more{opacity:1;transform:translateX(0)}
+
+/* ── 置顶条 ── */
+.news-item.pinned .news-date-box{
+  background:linear-gradient(135deg,var(--gold-light),#F5F0E0);
+  border-color:var(--gold)
+}
+.news-item.pinned .news-date-day{color:var(--gold)}
+.news-item.pinned .news-tag{
+  background:rgba(196,163,90,0.15);color:#8B7A3E;
+  font-weight:600
+}
+.news-item.pinned::before{background:var(--gold)}
+
+/* ── 骨架屏加载状态 ── */
+.skeleton-item{
+  display:flex;gap:16px;padding:18px clamp(16px,2.5vw,28px) 18px 14px;
+  border-bottom:1px solid var(--border);
+  align-items:center
+}
+.skeleton-item:last-child{border-bottom:none;padding-bottom:clamp(24px,2.5vw,32px)}
+.skeleton-box{
+  width:54px;height:54px;border-radius:var(--radius-md);
+  background:linear-gradient(90deg,var(--border),rgba(0,0,0,0.015),var(--border));
+  background-size:200% 100%;
+  animation:skeleton-loading 1.5s ease-in-out infinite;
+  flex-shrink:0
+}
+.skeleton-lines{flex:1;display:flex;flex-direction:column;gap:8px}
+.skeleton-line{
+  height:11px;border-radius:6px;
+  background:linear-gradient(90deg,var(--border),rgba(0,0,0,0.015),var(--border));
+  background-size:200% 100%;
+  animation:skeleton-loading 1.5s ease-in-out infinite
+}
+.skeleton-line:first-child{width:72%}
+.skeleton-line:nth-child(2){width:42%;height:9px}
+
+@keyframes skeleton-loading{
+  0%{background-position:200% 0}
+  100%{background-position:-200% 0}
+}
+
+/* ── 响应式 ── */
+@media(max-width:768px){
+  .news-date-col{flex:0 0 66px;padding-top:14px}
+  .news-date-box{width:42px;height:42px;border-radius:var(--radius-sm)}
+  .news-date-day{font-size:15px}
+  .news-date-month{font-size:7px;letter-spacing:1px}
+  .news-date-year{display:none}
+  .news-content-col{padding:14px 14px 14px 8px;gap:4px}
+  .news-item:not(:last-child)::after{left:calc(33px + 14px);top:44px}
+  .news-tag{font-size:9px;padding:1px 8px}
+  .news-title{font-size:13.5px;-webkit-line-clamp:3}
+  .skeleton-item{padding:14px 16px}
+  .news-card .page-title{padding:18px 18px 0}
+  .news-divider{margin:16px 18px 0}
+  .news-meta .read-more{display:none}
+}
+@media(max-width:480px){
+  .news-date-col{flex:0 0 56px;padding-top:12px}
+  .news-date-box{width:36px;height:36px}
+  .news-date-day{font-size:13px}
+  .news-date-month{display:none}
+  .news-content-col{padding:12px 10px 12px 6px}
+  .news-item:not(:last-child)::after{left:calc(28px + 10px);top:38px}
+  .news-tag-row{gap:4px}
+  .news-card .page-title .count{display:none}
+  .news-card .page-title{padding:14px 14px 0}
+  .news-divider{margin:12px 14px 0}
+}

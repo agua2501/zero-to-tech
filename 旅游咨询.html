@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>旅游咨询 - 茂名旅游网站</title>
+  <meta name="description" content="茂名旅游最新资讯、攻略、动态信息">
+  <link rel="icon" href="img/favicon.png" type="image/png">
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/旅游咨询.css">
+</head>
+<body>
+  <header class="header">
+    <nav class="nav"><ul class="nav-links">
+        <li><a href="./index.html">首页</a></li>
+        <li><a href="./茂名概述.html">茂名概况</a></li>
+        <li><a href="#" class="active">旅游咨询</a></li>
+        <li><a href="./旅游线路.html">旅游线路</a></li>
+        <li><a href="js/登录/Login.html" id="navLogin">登录</a></li>
+      </ul><ul id="langSwitcher" class="nav-lang"><li data-lang="zh" class="active">中</li><li data-lang="en">EN</li><li data-lang="ja">日</li><li data-lang="ko">한</li></ul></nav>
+  </header>
+
+  <main class="continer">
+    <div class="news-card">
+      <div class="page-title">
+        <span>旅游咨询</span>
+        <span class="count" id="newsCount"></span>
+      </div>
+      <div class="news-divider"></div>
+      <ul class="news-list" id="newsList">
+        <li class="skeleton-item"><div class="skeleton-box"></div><div class="skeleton-lines"><div class="skeleton-line"></div><div class="skeleton-line"></div></div></li>
+        <li class="skeleton-item"><div class="skeleton-box"></div><div class="skeleton-lines"><div class="skeleton-line"></div><div class="skeleton-line"></div></div></li>
+        <li class="skeleton-item"><div class="skeleton-box"></div><div class="skeleton-lines"><div class="skeleton-line"></div><div class="skeleton-line"></div></div></li>
+        <li class="skeleton-item"><div class="skeleton-box"></div><div class="skeleton-lines"><div class="skeleton-line"></div><div class="skeleton-line"></div></div></li>
+        <li class="skeleton-item"><div class="skeleton-box"></div><div class="skeleton-lines"><div class="skeleton-line"></div><div class="skeleton-line"></div></div></li>
+      </ul>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-col">
+        <h4>关于茂名</h4>
+        <p>茂名位于广东省西南部，是一座拥有滨海风光、山地景观和丰富文化的美丽城市，被誉为"南方油城"和"中国荔枝之乡"。</p>
+      </div>
+      <div class="footer-col">
+        <h4>快速链接</h4>
+        <ul>
+          <li><a href="index.html">首页</a></li>
+          <li><a href="茂名概述.html">茂名概述</a></li>
+          <li><a href="旅游咨询.html">旅游咨询</a></li>
+          <li><a href="旅游线路.html">旅游线路</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>联系方式</h4>
+        <p>地址：广东省茂名市<br>邮箱：info@maoming-travel.com<br>电话：0668-XXXXXXX</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-bottom-inner">
+        <p>&copy; 2025 茂名旅游网站 &mdash; 本站为学习作品，部分素材来自网络</p>
+        <div class="footer-social">
+          <a href="#" title="微信">W</a>
+          <a href="#" title="微博">S</a>
+          <a href="#" title="抖音">T</a>
+          <a href="#" title="邮箱">@</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    (function() {
+      "use strict";
+
+      /* ── 根据标题关键词自动分配分类标签 ── */
+      var TAG_RULES = [
+        { pattern: /文化|文博|非遗|节日|龙舟|荔枝/, label: "文化活动", cls: "news-tag-amber" },
+        { pattern: /高铁|公路|高速|交通|贯通|提速/, label: "交通建设", cls: "news-tag-blue" },
+        { pattern: /旅游|度假|旺季|滨海|第一滩/, label: "旅游动态", cls: "news-tag-green" },
+        { pattern: /生态|绿美|空气|环保/, label: "生态环境", cls: "news-tag-teal" },
+        { pattern: /产业|投资|产值|经济/, label: "产业经济", cls: "news-tag-purple" },
+        { pattern: /乡村|振兴|百千万/, label: "乡村振兴", cls: "news-tag-rose" },
+        { pattern: /教育|研学|基地/, label: "教育研学", cls: "news-tag-sky" },
+      ];
+
+      function getTag(title) {
+        for (var i = 0; i < TAG_RULES.length; i++) {
+          if (TAG_RULES[i].pattern.test(title)) return TAG_RULES[i];
+        }
+        return { label: "旅游资讯", cls: "news-tag-blue" };
+      }
+
+      /* ── 解析日期 ── */
+      function parseDate(dateStr) {
+        var parts = dateStr.split("-");
+        if (parts.length < 3) return { day: dateStr, month: "", year: "" };
+        var MONTH_ZH = ["","一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"];
+        var m = parseInt(parts[1], 10);
+        return {
+          day: parts[2],
+          month: MONTH_ZH[m] || m,
+          year: parts[0]
+        };
+      }
+
+      /* ── 渲染新闻项 HTML ── */
+      function renderNewsItem(item, idx) {
+        var d = parseDate(item.date);
+        var tag = getTag(item.title);
+        var pinned = idx === 0 ? " pinned" : "";
+        return '<li class="news-item' + pinned + '">'
+          + '<div class="news-date-col">'
+          + '<div class="news-date-box">'
+          + '<span class="news-date-day">' + d.day + '</span>'
+          + '<span class="news-date-month">' + d.month + '</span>'
+          + '</div>'
+          + (d.year ? '<span class="news-date-year">' + d.year + '</span>' : '')
+          + '</div>'
+          + '<div class="news-content-col">'
+          + '<div class="news-tag-row">'
+          + '<span class="news-tag ' + tag.cls + '">' + tag.label + '</span>'
+          + '</div>'
+          + '<h3 class="news-title">' + item.title + '</h3>'
+          + '<div class="news-meta">'
+          + '<span>' + item.date + '</span>'
+          + '<span class="dot"></span>'
+          + '<span>茂名旅游</span>'
+          + '<span class="read-more">阅读全文 →</span>'
+          + '</div>'
+          + '</div>'
+          + '</li>';
+      }
+
+      /* ── 主逻辑 ── */
+      document.addEventListener("DOMContentLoaded", function() {
+        var list = document.getElementById("newsList");
+        var count = document.getElementById("newsCount");
+
+        fetch("/api/news")
+          .then(function(r) { return r.json(); })
+          .then(function(data) {
+            if (!data.ok || !data.data || !data.data.length) {
+              list.innerHTML = '<li class="news-empty">'
+                + '<span class="news-empty-icon">⌘</span>'
+                + '暂无资讯<br><span style="font-size:12px;opacity:0.6">资讯将在发布后自动显示</span>'
+                + '</li>';
+              if (count) count.textContent = "";
+              return;
+            }
+            var items = data.data;
+            if (count) count.textContent = "共 " + items.length + " 条";
+            list.innerHTML = items.map(function(item, idx) {
+              return renderNewsItem(item, idx);
+            }).join("");
+          })
+          .catch(function() {
+            list.innerHTML = '<li class="news-empty">'
+              + '<span class="news-empty-icon">⚠</span>'
+              + '加载失败<br><span style="font-size:12px;opacity:0.6">请确认后端服务已启动</span>'
+              + '</li>';
+            if (count) count.textContent = "";
+          });
+      });
+    })();
+  </script>
+</body>
+</html>
