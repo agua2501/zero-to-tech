@@ -107,6 +107,7 @@ const ZH = {
   route_card_8_desc: "探秘茂名仙人洞，观赏天然溶洞奇观，体验山林徒步与瀑布清溪，含景区门票和当地农家午餐",
   route_card_9_title: "广东天马山生态旅游景区一日游",
   route_card_9_desc: "登天马山观云海日出，漫步原始森林栈道，探访天马瀑布群，呼吸天然氧吧清新空气，含景区门票和特色午餐",
+};
 const EN = {
   nav_home: "Home",
   nav_overview: "About",
@@ -240,7 +241,7 @@ window.__lang.ko.sidebar_title = "무명 여행";
   function buildMobileMenu(){
     const nav=document.querySelector(".nav");if(!nav||nav.querySelector(".menu-toggle"))return;
     const t=document.createElement("button");t.className="menu-toggle";t.setAttribute("aria-label","切换菜单");
-    t.innerHTML="<span></span><span></span><span></span>";
+     t.innerHTML="<span class=\"menu-icon\">☰</span><span class=\"menu-label\">更多</span>";
     t.addEventListener("click",function(){document.querySelector(".nav-links").classList.toggle("menu-open");this.classList.toggle("active")});
     nav.insertBefore(t,nav.firstChild)
   }
