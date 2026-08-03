@@ -231,53 +231,8 @@
     </div>
   </footer>
 
-  <script src="js/main.js"></script>
-  <script>
-    (function () {
-      /* ── 轮播图 ── */
-      var carousel = document.getElementById("homeCarousel");
-      if (carousel) {
-        var slides = carousel.querySelectorAll(".carousel-slide");
-        var dotsContainer = carousel.querySelector(".carousel-dots");
-        var prevBtn = carousel.querySelector(".carousel-prev");
-        var nextBtn = carousel.querySelector(".carousel-next");
-        if (slides.length) {
-          var current = 0, timer;
-          for (var i = 0; i < slides.length; i++) {
-            var dot = document.createElement("span");
-            dot.className = "dot" + (i === 0 ? " active" : "");
-            (function (idx) { dot.onclick = function () { goTo(idx) } })(i);
-            dotsContainer.appendChild(dot);
-          }
-          function goTo(n) {
-            for (var i = 0; i < slides.length; i++)slides[i].classList.remove("active");
-            var dots = dotsContainer.querySelectorAll(".dot");
-            for (var i = 0; i < dots.length; i++)dots[i].classList.remove("active");
-            current = ((n % slides.length) + slides.length) % slides.length;
-            slides[current].classList.add("active");
-            if (dots[current]) dots[current].classList.add("active");
-          }
-          function resetTimer() { clearInterval(timer); timer = setInterval(function () { goTo(current + 1) }, 4000) }
-          if (prevBtn) prevBtn.addEventListener("click", function () { goTo(current - 1); resetTimer() });
-          if (nextBtn) nextBtn.addEventListener("click", function () { goTo(current + 1); resetTimer() });
-          carousel.addEventListener("mouseenter", function () { clearInterval(timer) });
-          carousel.addEventListener("mouseleave", resetTimer);
-          resetTimer();
-        }
-      }
-
-      /* ── 侧边栏可点击 ── */
-      var sideItems = document.querySelectorAll(".left ul li");
-      for (var i = 0; i < sideItems.length; i++) {
-        (function (el) {
-          el.addEventListener("click", function () {
-            var href = this.getAttribute("data-href");
-            if (href) window.location.href = href;
-          });
-        })(sideItems[i]);
-      }
-    })();
-  </script>
+  <script type="module" src="js/main.js"></script>
+  <script type="module" src="js/home.js"></script>
 </body>
 
 </html>
