@@ -1,0 +1,22 @@
+.modal-overlay{display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.45);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);justify-content:center;align-items:center;animation:fadeIn .25s ease}
+.modal-overlay.active{display:flex}
+.modal-box{background:var(--white);border-radius:var(--radius-lg);box-shadow:0 20px 60px rgba(0,0,0,.15);padding:clamp(20px,3vw,32px);width:min(92%,420px);max-height:90vh;overflow-y:auto;animation:slideUp .3s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.modal-close{float:right;background:none;border:none;font-size:22px;color:var(--text-muted);cursor:pointer;transition:color .2s}
+.modal-close:hover{color:var(--text)}
+.modal-box h3{font-size:clamp(16px,1.2vw,18px);color:var(--navy);margin-bottom:4px}
+.modal-box .route-name{font-size:13px;color:var(--text-muted);margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.modal-field{margin-bottom:14px}
+.modal-field label{display:block;font-size:13px;font-weight:500;color:var(--text);margin-bottom:4px}
+.modal-field input,.modal-field textarea{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:14px;font-family:inherit;transition:border-color .3s,box-shadow .3s}
+.modal-field input:focus,.modal-field textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(1,118,178,.08)}
+.modal-field textarea{resize:vertical;min-height:60px}
+.modal-error{font-size:12.5px;color:#D4504C;margin-bottom:10px;min-height:18px}
+.modal-actions{display:flex;gap:10px;margin-top:4px}
+.modal-actions button{flex:1;padding:10px 0;border-radius:var(--radius-sm);font-size:14px;font-weight:500;cursor:pointer;transition:all .3s;border:none}
+.modal-cancel{background:var(--cream);color:var(--text-light)}
+.modal-cancel:hover{background:#e8e6e0}
+.modal-submit{background:var(--blue);color:#fff}
+.modal-submit:hover{background:var(--blue-dark);box-shadow:0 3px 12px rgba(1,118,178,.2)}
+.modal-submit:disabled{opacity:.5;cursor:not-allowed}
